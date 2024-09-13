@@ -5,13 +5,13 @@ import { MdAccountCircle } from "react-icons/md";
 export const tabs = [
     {
         id:1,
-        title : "Register",
+        title : "Kayıt Ol",
         to : "/register",
         icon : FiUser
     },
     {
         id:2,
-        title : "Login",
+        title : "Giriş Yap",
         to : "/login",
         icon : MdAccountCircle
     }
