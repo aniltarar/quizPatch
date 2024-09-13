@@ -4,6 +4,7 @@ import { tabs } from '~/data/data'
 import { FiUser } from 'react-icons/fi'
 import { logout } from '~/redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
+import { IoExitOutline } from "react-icons/io5";
 
 const Header = () => {
     const dispatch = useDispatch()
@@ -20,7 +21,7 @@ const Header = () => {
                     <FiUser/>
                     {user?.displayName}
                     </Link>
-                    <button onClick={() => dispatch(logout())} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>Exit</button>
+                    <button onClick={() => dispatch(logout())} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline/>Exit</button>
                 </div> : tabs.map((item) => (
                     <Link key={item.id} to={item.to} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
                         <span><item.icon /></span>
