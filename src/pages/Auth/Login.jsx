@@ -21,20 +21,20 @@ const Login = () => {
   const navigate = useNavigate()
   const handleLogin = async (data) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth,data.email,data.password)
+      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
       const user = userCredential.user
 
-      const userDoc = await getDoc(doc(db,"users",user.uid))
+      const userDoc = await getDoc(doc(db, "users", user.uid))
 
       const userData = ({
-        uid : user.uid,
-        email: user.email,
-        displayName : user.displayName,
+        uid: userDoc.data()?.uid,
+        email: userDoc.data()?.email,
+        displayName: userDoc.data()?.displayName,
         phoneNumber: userDoc.data()?.phoneNumber,
-        userRole : userDoc.data()?.userRole,
-        classrooms : userDoc.data()?.classrooms
+        userRole: userDoc.data()?.userRole,
+        classrooms: userDoc.data()?.classrooms
       })
-      
+
       dispatch(setUser(userData))
       toast.success("Giriş Yapıldı")
       navigate("/")
@@ -43,35 +43,38 @@ const Login = () => {
       console.log(error);
     }
   }
-  
+
   return (
-    <div className='w-full h-screen flex'>
-    <div className='w-[60%] bg-gradient-to-tl from-orange-500 to-purple-500 flex flex-col justify-center items-start p-24 gap-y-2'>
-      <h1 className='text-5xl font-black text-white flex gap-x-2'>QuizPatch <FaRocket /> </h1>
-      <p className='text-white'>Hesabına Giriş Yap
-        Quizpatch'e katılarak bilgi yarışmaları ve eğlenceli testlerle dolu dünyamıza adım at! Hızlı ve kolay bir şekilde kaydol, arkadaşlarınla veya tek başına eğlenerek öğren.
-        Yeni kullanıcı olarak seni sürpriz ödüller ve avantajlar bekliyor! Hemen kaydol ve bilgiyle dolu bir maceraya başla!</p>
-    </div>
-    <div className='w-[40%] flex flex-col items-center p-6 '>
-      <div className='flex flex-col items-center gap-y-2 border rounded-xl p-3 bg-white w-full'>
-        <h1 className='text-3xl font-semibold text-gray-600 '>Giriş Yap </h1>
-        <p className='text-sm text-gray-600 '>Lütfen sisteme Giriş yap</p>
-        <form className='w-3/4 flex flex-col gap-y-6' onSubmit={handleSubmit(handleLogin)}>
-          <div className='flex flex-col gap-y-1'>
-            <label className='text-sm font-light text-gray-600'>E-Mail</label>
-            <input type="text" placeholder='isim@mail.com' {...register("email")}  className={`px-4 py-2 rounded-md border outline-none`} />
-          </div>
-          <div className='flex flex-col gap-y-1'>
-            <label className='text-sm font-light text-gray-600'>Parola</label>
-            <input type="password" placeholder='Parolanızı giriniz' {...register("password")}  className={`px-4 py-2 rounded-md border outline-none`} />
-          </div>
-      
-          <button type='submit' className='bg-gradient-to-r from-orange-500 to-purple-500 text-white py-2 rounded-md'>Giriş Yap</button>
-        </form>
+    <div className='w-full bg-gradient-to-r from-orange-500 to-purple-500 flex flex-col md:flex-row justify-center items-start p-24 gap-x-12 flex-grow'>
+      <div className='flex flex-col gap-y-2 w-2/3 h-full justify-center'>
+        <h1 className='text-5xl font-black text-white flex gap-x-2'>QuizPatch <FaRocket /> </h1>
+        <p className='text-white w-[600px]'>Hesabına Giriş Yap
+          Quizpatch'e katılarak bilgi yarışmaları ve eğlenceli testlerle dolu dünyamıza adım at! Hızlı ve kolay bir şekilde kaydol, arkadaşlarınla veya tek başına eğlenerek öğren.
+          Yeni kullanıcı olarak seni sürpriz ödüller ve avantajlar bekliyor! Hemen kaydol ve bilgiyle dolu bir maceraya başla!
+        </p>
       </div>
+      <div className='p-4 bg-white rounded-md border md:w-1/4 flex flex-col gap-y-5'>
+      <div className='flex flex-col gap-y-1.5 items-center text-gray-600' >
+      <h1 className=' text-3xl font-semibold'>Giriş Yap</h1>
+      <p className='text-sm' >Lütfen sisteme giriş yapınız.</p>
+      </div>
+         <form className='flex flex-col gap-y-6  ' onSubmit={handleSubmit(handleLogin)}>
+        <div className='flex flex-col gap-y-1'>
+          <label className='text-sm font-light text-gray-600'>E-Mail</label>
+          <input type="text" placeholder='isim@mail.com' {...register("email")} className={`px-4 py-2 rounded-md border outline-none`} />
+        </div>
+        <div className='flex flex-col gap-y-1'>
+          <label className='text-sm font-light text-gray-600'>Parola</label>
+          <input type="password" placeholder='Parolanızı giriniz' {...register("password")} className={`px-4 py-2 rounded-md border outline-none`} />
+        </div>
+        <button type='submit' className='bg-gradient-to-r from-orange-500 to-purple-500 text-white py-2 rounded-md'>Giriş Yap</button>
+      </form>
+     </div>
     </div>
-  </div>
   )
 }
 
 export default Login
+
+
+

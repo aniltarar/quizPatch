@@ -34,7 +34,9 @@ const Register = () => {
           uid: user.uid,
           displayName: user.displayName,
           email: user.email,
-          phoneNumber: data.phoneNumber
+          phoneNumber: data.phoneNumber,
+          userRole: data.role,
+          classrooms: []
         }));
 
         const teacherRef = doc(collection(db, "teachers"), user.uid);
@@ -87,35 +89,35 @@ const Register = () => {
 
 
   return (
-    <div className='w-full h-screen flex'>
-      <div className='w-[40%] flex flex-col items-center p-6 '>
-        <div className='flex flex-col items-center gap-y-2 border rounded-xl p-3 bg-white w-full'>
+    <div className='w-full flex-grow flex bg-gradient-to-tl from-orange-500 to-purple-500 justify-center items-center'>
+      <div className='flex flex-col items-center p-6 w-full flex-grow'>
+        <div className='flex flex-col items-center gap-y-2 border rounded-xl p-3 bg-white w-3/4'>
           <h1 className='text-3xl font-semibold text-gray-600 '>Kayıt Ol</h1>
           <p className='text-sm text-gray-600 '>Lütfen sisteme ücretsiz bir şekilde kayıt ol</p>
-          <form className='w-3/4 flex flex-col gap-y-6' onSubmit={handleSubmit(registerHandle)}>
+          <form className='w-full px-5 flex flex-col gap-y-3' onSubmit={handleSubmit(registerHandle)}>
             <div className='flex flex-col gap-y-1'>
               <label className='text-sm font-light text-gray-600'>E-Mail</label>
-              <input type="text" placeholder='isim@mail.com' {...register("email")} className={`px-4 py-2 rounded-md border outline-none ${errors.email && "border-red-500 "}`} />
+              <input type="text" placeholder='isim@mail.com' {...register("email")} className={`px-3 py-1.5 rounded-md border outline-none ${errors.email && "border-red-500 "}`} />
               <span className="text-red-500 text-sm">{errors.email && errors.email.message}</span>
             </div>
             <div className='flex flex-col gap-y-1'>
               <label className='text-sm font-light text-gray-600'>Adınız Soyadınız</label>
-              <input type="text" placeholder='Örn: Anıl Tarar' {...register("displayName")} className={`px-4 py-2 rounded-md border outline-none ${errors.displayName && "border-red-500 "}`} />
+              <input type="text" placeholder='Örn: Anıl Tarar' {...register("displayName")} className={`px-3 py-1.5 rounded-md border outline-none ${errors.displayName && "border-red-500 "}`} />
               <span className="text-red-500 text-sm">{errors.displayName && errors.displayName.message}</span>
             </div>
             <div className='flex flex-col gap-y-1'>
               <label className='text-m font-light text-gray-600'>Telefon Numaranız</label>
-              <input type="text" placeholder='5554561234' {...register("phoneNumber")} className={`px-4 py-2 rounded-md border outline-none ${errors.phoneNumber && "border-red-500 "}`} />
+              <input type="text" placeholder='5554561234' {...register("phoneNumber")} className={`px-3 py-1.5 rounded-md border outline-none ${errors.phoneNumber && "border-red-500 "}`} />
               <span className="text-red-500 text-sm">{errors.phoneNumber && errors.phoneNumber.message}</span>
             </div>
             <div className='flex flex-col gap-y-1'>
               <label className='text-sm font-light text-gray-600'>Şifreniz</label>
-              <input type="password" placeholder='Parolanızı giriniz.' {...register("password")} className={`px-4 py-2 rounded-md border outline-none ${errors.password && "border-red-500 "}`} />
+              <input type="password" placeholder='Parolanızı giriniz.' {...register("password")} className={`px-3 py-1.5 rounded-md border outline-none ${errors.password && "border-red-500 "}`} />
               <span className="text-red-500 text-sm">{errors.password && errors.password.message}</span>
             </div>
             <div className='flex flex-col gap-y-1'>
               <label className='text-sm font-light text-gray-600'>Şifre Tekrarı</label>
-              <input type="password" placeholder='Parolanızı tekrar giriniz.' {...register("passwordConfirmation")} className={`px-4 py-2 rounded-md border outline-none ${errors.passwordConfirmation && "border-red-500 "}`} />
+              <input type="password" placeholder='Parolanızı tekrar giriniz.' {...register("passwordConfirmation")} className={`px-3 py-1 rounded-md border outline-none ${errors.passwordConfirmation && "border-red-500 "}`} />
               <span className="text-red-500 text-sm">{errors.passwordConfirmation && errors.passwordConfirmation.message}</span>
             </div>
 
@@ -127,10 +129,10 @@ const Register = () => {
                   name="option"
                   value="student"
                   required
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 "
                   {...register("role")}
                 />
-                <label htmlFor="student" className="ml-2 text-sm font-medium text-gray-900">Öğrenci</label>
+                <label htmlFor="student" className="ml-2 text- font-medium text-gray-900">Öğrenci</label>
               </div>
               <div className="flex items-center gap-x-1">
                 <input
@@ -140,7 +142,7 @@ const Register = () => {
                   value="teacher"
                   required
                   {...register("role")}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300"
                 />
                 <label htmlFor="teacher" className="ml-2 text-sm font-medium text-gray-900">Eğitmen</label>
               </div>
@@ -150,7 +152,7 @@ const Register = () => {
           </form>
         </div>
       </div>
-      <div className='w-[60%] bg-gradient-to-tl from-orange-500 to-purple-500 flex flex-col justify-center items-start p-24 gap-y-2'>
+      <div className='flex flex-col justify-center items-start p-24 gap-y-2 w-full '>
         <h1 className='text-5xl font-black text-white flex gap-x-2'>QuizPatch <FaRocket /> </h1>
         <p className='text-white'>Hesabını Oluştur
           Quizpatch'e katılarak bilgi yarışmaları ve eğlenceli testlerle dolu dünyamıza adım at! Hızlı ve kolay bir şekilde kaydol, arkadaşlarınla veya tek başına eğlenerek öğren.
