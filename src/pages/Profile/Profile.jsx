@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateDoc, doc } from 'firebase/firestore'
 import { db } from '~/firebase/firebaseConfig'
 import { updateUser } from '~/redux/slices/userSlice'
+import { toast } from 'react-toastify'
 
 
 const Profile = () => {
@@ -18,17 +19,18 @@ const Profile = () => {
         const userRef = doc(db, "users", user.uid);
         try {
             await updateDoc(userRef, {
-                displayName: selectedValue.displayName,
-                phoneNumber: selectedValue.phoneNumber
+                displayName: selectedValue.displayName || user.displayName,
+                phoneNumber: selectedValue.phoneNumber || user.phoneNumber
             })
 
             const updatedData = {
-                displayName: selectedValue.displayName,
-                phoneNumber: selectedValue.phoneNumber
+                displayName: selectedValue.displayName || user.displayName,
+                phoneNumber: selectedValue.phoneNumber || user.phoneNumber
             }
 
             setIsEditMode(false)
-            console.log("Başarıyla Güncellendi");
+
+            toast.success("Başarıyla Profil Güncellendi!")
             dispatch(updateUser(updatedData))
         } catch (error) {
             console.log(error);
@@ -37,7 +39,7 @@ const Profile = () => {
 
 
     return (
-        <div className='flex bg-zinc-100 flex-grow p-6 items-start'>
+        <div className='flex justify-center items-start flex-grow bg-zinc-50 h-screen p-6'>
             <form className='flex gap-x-5 justify-between w-full items-center' onSubmit={handleSubmit(save)}>
                 <div className='flex flex-col gap-y-3 bg-white p-3 rounded-md border shadow-md relative'>
                     <div className="flex gap-x-2">
@@ -64,7 +66,6 @@ const Profile = () => {
                         <FiEdit />
                     </button>
                 </div>
-
             </form>
         </div>
     )

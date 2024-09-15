@@ -26,8 +26,8 @@ const App = () => {
         <Route path='/' element={user ? <Home/> : <Navigate to="/login"/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/classrooms" element={<Classrooms/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/classrooms" element={<Classrooms/>}/>
         </Routes>
       </FlexContainer>
     </Router>

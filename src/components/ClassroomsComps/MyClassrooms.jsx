@@ -3,10 +3,10 @@ import ClassItem from './ClassItem'
 
 const MyClassrooms = () => {
   return (
-    <div className='w-100 rounded-xl bg-zinc-100  p-3 mx-3'>
-        <h1 className='text-center text-2xl'>Mevcut Sınıflarım</h1>
-        <div className="classroomsGrid grid gap-3 grid-flow-row p-">
-
+    <div className='w-full h-full'>
+        <div className=" grid grid-cols-1 gap-5">
+        <ClassItem/>
+        <ClassItem/>
         <ClassItem/>
         <ClassItem/>
         <ClassItem/>

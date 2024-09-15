@@ -35,7 +35,7 @@ const AddClassroom = () => {
                             <ClassPerson itemName="Ogrenci-5" />
                         </div>
                     </div>
-                    <button className="m-2 px-2 py-3 bg-lime-400 hover:bg-lime-500 rounded-l text-xl">Sınıf Oluştur</button>
+                    <button className="m-2 px-2 py-3 bg-violet-100 text-violet-500 hover:bg-violet-500 hover:text-white trans rounded-l text-xl transition-colors">Sınıf Oluştur</button>
                 </div>
             </form>
 
