@@ -48,7 +48,6 @@ export const getAllStudents = createAsyncThunk(
     const studentsRef = collection(db, "students");
     const snapshot = await getDocs(studentsRef);
     const studentsData = snapshot.docs.map((student) => ({
-      id: student.id,
       ...student.data(),
     }));
     return studentsData;

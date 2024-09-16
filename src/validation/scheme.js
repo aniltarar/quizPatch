@@ -13,3 +13,9 @@ export const loginScheme = z.object({
     email: z.string().email("Lütfen geçerli bir e-mail adresi giriniz."),
     password: z.string().min(6,"En az 6 karakter olmalı").max(20,"En fazla 20 karakter olmalı")
     });
+
+
+    export const addClassScheme = z.object({
+        className : z.string().min(1,"Lütfen sınıf adını giriniz."),
+        classDescription : z.string().min(1,"Lütfen sınıfı açıklayacak 1-2 kısa cümle giriniz."),
+    })

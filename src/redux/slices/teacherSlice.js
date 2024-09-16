@@ -45,7 +45,6 @@ export const getAllTeachers = createAsyncThunk("teachers/getAllTeachers", async(
   const teachersRef = collection(db,"teachers")
   const snapshot = await getDocs(teachersRef)
   const teachersData = snapshot.docs.map((teacher) => ({
-    id : teacher.id,
     ...teacher.data()
   }))
   return teachersData

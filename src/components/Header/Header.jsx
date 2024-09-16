@@ -11,6 +11,8 @@ const Header = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
 
+    
+
     return (
         <header className='w-full bg-white flex-none min-h-20 px-12 border-b flex justify-between items-center'>
             <Link to="/" className='text-4xl bg-gradient-to-r bg-clip-text text-transparent from-orange-500 to-purple-500 font-bold'>QuizPatch
@@ -18,15 +20,27 @@ const Header = () => {
             </Link >
 
             <nav className='flex gap-x-5'>
+                {/* {user.userRole === "admin" ?  <Link to="/admin" className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
+                        <FiUser />
+                        Admin Panel
+                    </Link> : null } */}
                 {user ? 
                 <div className='flex gap-x-2'>
                     <Link to="/profile" className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
                         <FiUser />
                         {user?.displayName}
                     </Link>
-                    <Link to="/classrooms" className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
+                    
+
+                    <Link to="/classrooms" className={`${user.userRole === "student" ? "flex" : "hidden"} bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
                         <MdClass />
-                        Sınıflarım</Link>
+                        Sınıflarım
+                    </Link>
+
+                    <Link to="/classrooms-management" className={`${user.userRole === "teacher" ? "flex" : "hidden"} bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+                        <MdClass />
+                        Sınıf Yönetimi
+                    </Link>
                     <button onClick={() => dispatch(logout())} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline />Çıkış Yap</button>
                 </div> : tabs.map((item) => (
                     <Link key={item.id} to={item.to} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>

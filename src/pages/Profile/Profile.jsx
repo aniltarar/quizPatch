@@ -24,7 +24,6 @@ const Profile = () => {
             ...doc.data()
         }))
 
-        console.log(usersData);
     };
 
 
