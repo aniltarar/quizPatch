@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FiEdit } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateDoc, doc } from 'firebase/firestore'
+import { updateDoc, doc, collection, getDocs } from 'firebase/firestore'
 import { db } from '~/firebase/firebaseConfig'
 import { updateUser } from '~/redux/slices/userSlice'
 import { toast } from 'react-toastify'
@@ -15,8 +15,23 @@ const Profile = () => {
 
     const { register, handleSubmit } = useForm()
 
+
+    const getAllUsers = async () => {
+        const usersRef = collection(db, "users");
+        const snapshot = await getDocs(usersRef);
+        const usersData = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
+
+        console.log(usersData);
+    };
+
+
+
     const save = async (selectedValue) => {
         const userRef = doc(db, "users", user.uid);
+
         try {
             await updateDoc(userRef, {
                 displayName: selectedValue.displayName || user.displayName,
@@ -37,6 +52,10 @@ const Profile = () => {
         }
     }
 
+
+    useEffect(() => {
+        getAllUsers()
+    }, [])
 
     return (
         <div className='flex justify-center items-start flex-grow bg-zinc-50 h-screen p-6'>
