@@ -16,15 +16,16 @@ const Header = () => {
             <Link to="/" className='text-4xl bg-gradient-to-r bg-clip-text text-transparent from-orange-500 to-purple-500 font-bold'>QuizPatch
                 <small className='text-xs'>v0.2</small>
             </Link >
-            
+
             <nav className='flex gap-x-5'>
-                {user ? <div className='flex gap-x-2'>
+                {user ? 
+                <div className='flex gap-x-2'>
                     <Link to="/profile" className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
                         <FiUser />
                         {user?.displayName}
                     </Link>
-                    <Link to="/classrooms"className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
-                    <MdClass/>
+                    <Link to="/classrooms" className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
+                        <MdClass />
                         Sınıflarım</Link>
                     <button onClick={() => dispatch(logout())} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline />Çıkış Yap</button>
                 </div> : tabs.map((item) => (

@@ -1,5 +1,5 @@
-import React from 'react'
-import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom'
+import React, { useEffect } from 'react'
+import {BrowserRouter as Router, Route, Routes, Navigate, useNavigate, Outlet, RouterProvider, createBrowserRouter} from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
@@ -14,24 +14,54 @@ import FlexContainer from '../containers/FlexContainer'
 const App = () => {
 
 
-  const {user} = useSelector(state => state.user)
+  const { user } = useSelector((store) => store.user);
 
 
-  return (
-    <Router>
+
+
+
+  const Layout = () => {
+    return (
       <FlexContainer>
-      <Header/>
-      <ToastContainer position='top-center'/>
-      <Routes>
-        <Route path='/' element={user ? <Home/> : <Navigate to="/login"/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/register" element={<Register/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-        <Route path="/classrooms" element={<Classrooms/>}/>
-        </Routes>
+        <Header/>
+        <Outlet/>
       </FlexContainer>
-    </Router>
-  )
+    )
+  }
+
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element : <Layout/>,
+      children: [
+        {
+          path: "/",
+          element : user ? <Home/> : <Navigate to="/login"/>
+         },
+        {
+          path : "/register",
+          element :<Register/>
+        },
+        {
+          path : "/login",
+          element :<Login/>
+        },
+        {
+          path :"classrooms",
+          element : user ? <Classrooms/> : <Navigate to="/"/>
+        },
+        {
+          path:"/profile",
+          element : user ? <Profile/> : <Navigate to="/login"/>
+        }
+        
+      ]
+    }
+  ])
+
+  return <RouterProvider router={router}/>
+  
 }
 
 export default App

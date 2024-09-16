@@ -3,15 +3,21 @@ import ClassPerson from './ClassPerson'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllStudents } from '~/redux/slices/studentSlice'
 import { getAllTeachers } from '~/redux/slices/teacherSlice'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
+
 
 
 
 const AddClassroom = () => {
 
 
-    const {students,isLoading} = useSelector((state) => state.student)
+    const { students, isLoading: studentsLoading } = useSelector((state) => state.student);
+    const { teachers, isLoading: teachersLoading } = useSelector((state) => state.teacher);
 
-    const {teachers} = useSelector((state) => state.teacher)
+    const tempArray = Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} height={50} />)
+
 
     const dispatch = useDispatch();
 
@@ -20,7 +26,7 @@ const AddClassroom = () => {
         dispatch(getAllStudents());
         dispatch(getAllTeachers())
     }, [dispatch]);
-    
+
 
     return (
         <div className="w-100 bg-zinc-100 rounded-xl p-3 mx-3">
@@ -40,17 +46,24 @@ const AddClassroom = () => {
                     <div className="flex flex-col gap-y-1">
                         <label>Sınıf Öğretmenleri</label>
                         <div className="teacherGrid grid lg:grid-cols-4 md:grid-cols-2 gap-2 sm:grid-cols-1 ">
-                            {isLoading ? <div>Yükleniyor...</div> : teachers.map((teacher) => (
-                                <ClassPerson key={teacher.uid} itemName={teacher.displayName} />
-                            ))}
+                            {teachersLoading ? (tempArray) :
+                                (
+                                    teachers.map((teacher) => (
+                                        <ClassPerson key={teacher.uid} itemName={teacher.displayName} />
+                                    ))
+                                )}
                         </div>
                     </div>
                     <div className="flex flex-col gap-y-1">
                         <label>Sınıf Öğrencileri</label>
                         <div className="studentGrid grid lg:grid-cols-4 md:grid-cols-2 gap-2 sm:grid-cols-1 ">
-                            {students.map((student) => (
-                                <ClassPerson key={student.uid} itemName={student.displayName} />
-                            ))}
+                            {studentsLoading ? (
+                                Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} height={50} />)
+                            ) : (
+                                students.map((student) => (
+                                    <ClassPerson key={student.uid} itemName={student.displayName} />
+                                ))
+                            )}
                         </div>
                     </div>
                     <button className="m-2 px-2 py-3 bg-violet-100 text-violet-500 hover:bg-violet-500 hover:text-white trans rounded-l text-xl transition-colors">Sınıf Oluştur</button>
