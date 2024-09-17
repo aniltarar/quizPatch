@@ -13,6 +13,7 @@ import ClassroomManagement from './pages/Classrooms/ClassroomManagement'
 import Classrooms from './pages/Classrooms/Classrooms'
 import Admin from './pages/Admin/Admin'
 import Test from './pages/Test'
+import ClassroomDetail from './pages/Classrooms/ClassroomDetail'
 
 const App = () => {
 
@@ -22,6 +23,7 @@ const App = () => {
   const Layout = () => {
     return (
       <FlexContainer>
+        <ToastContainer/>
         <Header/>
         <Outlet/>
       </FlexContainer>
@@ -33,7 +35,6 @@ const App = () => {
     {
       path: "/",
       element : <Layout/>,
-    
       children: [
         {
           path: "/",
@@ -66,6 +67,10 @@ const App = () => {
         {
           path : "/admin",
           element : user && user.userRole === "admin" ? <Admin/> : <Navigate to="/login"/>
+        },
+        {
+          path : "classroom/:id",
+          element : <ClassroomDetail/>
         }
       ]
     }

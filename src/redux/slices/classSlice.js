@@ -1,6 +1,16 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
+import {
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "~/firebase/firebaseConfig";
+import { toast } from "react-toastify";
+
+
 
 const initialState = {
   classrooms: [],
@@ -56,17 +66,65 @@ const classSlice = createSlice({
 
 export const addClassroom = createAsyncThunk(
   "classrooms/addClassroom",
-  async (data) => {
+  async ({ data, user }) => { 
     try {
+      const restStudents = data.students.map(({ classrooms, ...rest }) => rest);
+      const restTeachers = data.teachers.map(({ classrooms, ...rest }) => rest);
+
       const classroomRef = doc(collection(db, "classrooms"));
-      await setDoc(classroomRef, data);
-      console.log("Başarıyla Veritabanına sınıf Eklendi");
+
+      await setDoc(classroomRef, {
+        className: data.className,
+        classDescription: data.classDescription,
+        students: restStudents,
+        teachers: restTeachers,
+      });
+
+      // Öğrenci ve Öğretmen tablosunda classroom'a eklenecek document
+      const classRoomData = {
+        id: classroomRef.id,
+        className: data.className,
+        classDescription: data.classDescription,
+        teachers: restTeachers,
+        students: restStudents,
+      };
+
+      console.log(classRoomData);
+
+      const teachers = data.teachers;
+      for (const teacher of teachers) {
+        const teacherRef = doc(db, "teachers", teacher.uid);
+        await updateDoc(teacherRef, {
+          classrooms: arrayUnion(classRoomData),
+        });
+      }
+
+      const students = data.students;
+      for (const student of students) {
+        const studentRef = doc(db, "students", student.uid);
+        await updateDoc(studentRef, {
+          classrooms: arrayUnion(classRoomData),
+        });
+      }
+
+
+        const userRef = doc(db, "users", user.uid);
+
+        await updateDoc(userRef, {
+        classrooms: arrayUnion(classRoomData),
+        });
+      
+
+      toast.success("Sınıf başarıyla eklendi");
     } catch (error) {
-      console.error("Error adding classroom:", error);
-      throw error;
+      const message = error.message || "Bir hata meydana geldi";
+      toast.error(message);
+      return isRejectedWithValue({ message });
+      
     }
   }
 );
+
 export const getClassrooms = createAsyncThunk(
   "classrooms/getClassrooms",
   async () => {
@@ -84,6 +142,10 @@ export const getClassrooms = createAsyncThunk(
   }
 );
 
+
+
+
 export const { reset, setClassrooms } = classSlice.actions;
 
 export default classSlice.reducer;
+

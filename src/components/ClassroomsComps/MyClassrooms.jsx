@@ -8,7 +8,7 @@ import ClassItem from './ClassItem'
 const MyClassrooms = () => {
 
   
-  const {classrooms} = useSelector(state => state.classrooms)
+  const {user} = useSelector(state => state.user)
   const dispatch = useDispatch();
 
   
@@ -21,9 +21,9 @@ const MyClassrooms = () => {
 
   return (
     <div className='w-full h-full'>
-        <div className=" grid grid-cols-1 gap-5">
-          {classrooms.map((classroom,i) => (
-            <ClassItem key={i} classroom={classroom}/>
+        <div className=" grid grid-cols-1 gap-y-5 rounded-xl">
+          {user.classrooms?.map((classroom,i) => (
+            <ClassItem  key={i} classroom={classroom}/>
           ))}
         </div>
     </div>

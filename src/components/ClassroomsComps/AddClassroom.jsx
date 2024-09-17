@@ -6,14 +6,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllStudents } from '~/redux/slices/studentSlice';
 import { getAllTeachers } from '~/redux/slices/teacherSlice';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { FaPlus } from 'react-icons/fa6';
 import { addClassroom } from '~/redux/slices/classSlice';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { updateUserClass} from '~/redux/slices/userSlice';
 
 
 const AddClassroom = () => {
     const { students, isLoading: studentsLoading } = useSelector((state) => state.student);
     const { teachers, isLoading: teachersLoading } = useSelector((state) => state.teacher);
+
+    const {user} = useSelector((state) => state.user);
 
 
     const tempArray = Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} height={50} />);
@@ -32,17 +35,21 @@ const AddClassroom = () => {
     const { register, handleSubmit } = useForm();
     
 
-
     const addArray = (data) => {
-        try {
-          const classData = {...data, students: selectedStudent, teachers: selectedTeacher }
-          dispatch(addClassroom(classData))
-        } catch (error) {
-          console.error('Error adding array:', error);
-        }
-      };
+      try {
+        const classData = { ...data, students: selectedStudent, teachers: selectedTeacher };
+        dispatch(addClassroom({ data: classData, user })); //firebase
+        dispatch(updateUserClass({...classData, id: classData.id})); //redux
+      } catch (error) {
+        console.error('Error adding array:', error);
+      }
+    };
 
+      // ***************** 
+      /*
+        Kullanıcıya 'ID' şeklinde data gönderilmeli.
 
+      */
 
 
     return (

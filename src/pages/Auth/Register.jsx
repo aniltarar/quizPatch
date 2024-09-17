@@ -12,9 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 
 const Register = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const navigate = useNavigate()
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(registerScheme)
   });
   
@@ -29,7 +29,7 @@ const Register = () => {
         await updateProfile(user, {
           displayName: data.displayName
         });
-        toast.success("Kayıt Başarılı, Firestore kontrol ediniz!");
+        
         dispatch(setUser({
           uid: user.uid,
           displayName: user.displayName,
@@ -76,11 +76,11 @@ const Register = () => {
           userRole: data.role,
           classrooms: []
         })
-
-        navigate("/")
       } else {
         toast.error("Parolalar uyuşmuyor!");
       }
+      navigate("/")
+      toast.success("Kayıt Başarılı, Firestore kontrol ediniz!");
     } catch (error) {
       toast.error(error.message);
     }
