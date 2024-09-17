@@ -24,7 +24,21 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
       const user = userCredential.user
 
+
+
       const userDoc = await getDoc(doc(db, "users", user.uid))
+
+      const studentDoc = await getDoc(doc(db,"students",user.uid))
+    
+      const studentData = ({
+        uid: userDoc.data()?.uid,
+        email: userDoc.data()?.email,
+        displayName: userDoc.data()?.displayName,
+        phoneNumber: userDoc.data()?.phoneNumber,
+        userRole: userDoc.data()?.userRole,
+        classrooms: studentDoc.data()?.classrooms
+      })
+
 
       const userData = ({
         uid: userDoc.data()?.uid,
@@ -35,7 +49,13 @@ const Login = () => {
         classrooms: userDoc.data()?.classrooms
       })
 
-      dispatch(setUser(userData))
+
+      if(userDoc.data().userRole === "student"){
+        dispatch(setUser(studentData))
+      }else{
+        dispatch(setUser(userData))
+      }
+
       toast.success("Giriş Yapıldı")
       navigate("/")
     } catch (error) {
@@ -54,22 +74,22 @@ const Login = () => {
         </p>
       </div>
       <div className='p-4 bg-white rounded-md border md:w-1/4 flex flex-col gap-y-5'>
-      <div className='flex flex-col gap-y-1.5 items-center text-gray-600' >
-      <h1 className=' text-3xl font-semibold'>Giriş Yap</h1>
-      <p className='text-sm' >Lütfen sisteme giriş yapınız.</p>
+        <div className='flex flex-col gap-y-1.5 items-center text-gray-600' >
+          <h1 className=' text-3xl font-semibold'>Giriş Yap</h1>
+          <p className='text-sm' >Lütfen sisteme giriş yapınız.</p>
+        </div>
+        <form className='flex flex-col gap-y-6  ' onSubmit={handleSubmit(handleLogin)}>
+          <div className='flex flex-col gap-y-1'>
+            <label className='text-sm font-light text-gray-600'>E-Mail</label>
+            <input type="text" placeholder='isim@mail.com' {...register("email")} className={`px-4 py-2 rounded-md border outline-none`} />
+          </div>
+          <div className='flex flex-col gap-y-1'>
+            <label className='text-sm font-light text-gray-600'>Parola</label>
+            <input type="password" placeholder='Parolanızı giriniz' {...register("password")} className={`px-4 py-2 rounded-md border outline-none`} />
+          </div>
+          <button type='submit' className='bg-gradient-to-r from-orange-500 to-purple-500 text-white py-2 rounded-md'>Giriş Yap</button>
+        </form>
       </div>
-         <form className='flex flex-col gap-y-6  ' onSubmit={handleSubmit(handleLogin)}>
-        <div className='flex flex-col gap-y-1'>
-          <label className='text-sm font-light text-gray-600'>E-Mail</label>
-          <input type="text" placeholder='isim@mail.com' {...register("email")} className={`px-4 py-2 rounded-md border outline-none`} />
-        </div>
-        <div className='flex flex-col gap-y-1'>
-          <label className='text-sm font-light text-gray-600'>Parola</label>
-          <input type="password" placeholder='Parolanızı giriniz' {...register("password")} className={`px-4 py-2 rounded-md border outline-none`} />
-        </div>
-        <button type='submit' className='bg-gradient-to-r from-orange-500 to-purple-500 text-white py-2 rounded-md'>Giriş Yap</button>
-      </form>
-     </div>
     </div>
   )
 }

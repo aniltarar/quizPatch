@@ -23,7 +23,7 @@ const MyClassrooms = () => {
     <div className='w-full h-full'>
         <div className=" grid grid-cols-1 gap-y-5 rounded-xl">
           {user.classrooms?.map((classroom,i) => (
-            <ClassItem  key={i} classroom={classroom}/>
+            <ClassItem key={i} classroom={classroom}/>
           ))}
         </div>
     </div>

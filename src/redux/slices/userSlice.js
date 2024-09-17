@@ -1,32 +1,34 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
-}
+  user: JSON.parse(localStorage.getItem('user')) || null,
+};
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser : (state,action) => {
-      state.user = action.payload
-      localStorage.setItem("user", JSON.stringify(action.payload));
+    setUser: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logout: (state) => {
-      state.user = null
-      localStorage.removeItem("user")
+      state.user = null;
+      localStorage.removeItem('user');
     },
-    updateUser: (state,action) => {
-      state.user = {...state.user,...action.payload}
-      localStorage.setItem("user", JSON.stringify(state.user))
+    updateUser: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+      localStorage.setItem('user', JSON.stringify(state.user));
     },
-    updateUserClass: (state,action) => {
-      state.user.classrooms = [...state.user.classrooms,action.payload]
-      localStorage.setItem("user", JSON.stringify(state.user))
-    }
-  }
-})
+    addClassToUser: (state, action) => {
+      const updatedClassrooms = [...state.user.classrooms, action.payload];
+      state.user = { ...state.user, classrooms: updatedClassrooms };
+    
+      localStorage.setItem('user', JSON.stringify(state.user));
+    },
+  },
+});
 
+export const { setUser, logout, updateUser, addClassToUser } = userSlice.actions;
 
-export const { setUser,logout,updateUser,updateUserClass } = userSlice.actions
-
-export default userSlice.reducer
+export default userSlice.reducer;

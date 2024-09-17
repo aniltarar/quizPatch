@@ -9,8 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { addClassroom } from '~/redux/slices/classSlice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { updateUserClass} from '~/redux/slices/userSlice';
-
+import {addClassToUser} from '~/redux/slices/userSlice';
 
 const AddClassroom = () => {
     const { students, isLoading: studentsLoading } = useSelector((state) => state.student);
@@ -39,17 +38,10 @@ const AddClassroom = () => {
       try {
         const classData = { ...data, students: selectedStudent, teachers: selectedTeacher };
         dispatch(addClassroom({ data: classData, user })); //firebase
-        dispatch(updateUserClass({...classData, id: classData.id})); //redux
       } catch (error) {
         console.error('Error adding array:', error);
       }
     };
-
-      // ***************** 
-      /*
-        Kullanıcıya 'ID' şeklinde data gönderilmeli.
-
-      */
 
 
     return (

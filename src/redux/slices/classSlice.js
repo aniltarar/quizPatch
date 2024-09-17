@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "~/firebase/firebaseConfig";
 import { toast } from "react-toastify";
-
+import { addClassToUser } from "./userSlice";
 
 
 const initialState = {
@@ -56,6 +56,7 @@ const classSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.classrooms = action.payload;
+        
       })
       .addCase(getClassrooms.rejected, (state, action) => {
         state.isError = true;
@@ -66,13 +67,16 @@ const classSlice = createSlice({
 
 export const addClassroom = createAsyncThunk(
   "classrooms/addClassroom",
-  async ({ data, user }) => { 
+  async ({ data, user }, { dispatch }) => { // dispatch'i ekleyin
     try {
+      // Öğrenci ve öğretmenlerden classrooms bilgisini çıkar
       const restStudents = data.students.map(({ classrooms, ...rest }) => rest);
       const restTeachers = data.teachers.map(({ classrooms, ...rest }) => rest);
 
+      // Yeni classroom için bir referans oluşturun
       const classroomRef = doc(collection(db, "classrooms"));
 
+      // Classroom'u Firestore'a kaydedin
       await setDoc(classroomRef, {
         className: data.className,
         classDescription: data.classDescription,
@@ -80,17 +84,17 @@ export const addClassroom = createAsyncThunk(
         teachers: restTeachers,
       });
 
-      // Öğrenci ve Öğretmen tablosunda classroom'a eklenecek document
+      // classroomRef'in ID'sini alın ve classData'ya ekleyin
       const classRoomData = {
-        id: classroomRef.id,
+        id: classroomRef.id, 
         className: data.className,
         classDescription: data.classDescription,
         teachers: restTeachers,
         students: restStudents,
       };
 
-      console.log(classRoomData);
 
+      // Öğretmen ve öğrenci referanslarını güncelleyin
       const teachers = data.teachers;
       for (const teacher of teachers) {
         const teacherRef = doc(db, "teachers", teacher.uid);
@@ -107,23 +111,27 @@ export const addClassroom = createAsyncThunk(
         });
       }
 
-
-        const userRef = doc(db, "users", user.uid);
-
-        await updateDoc(userRef, {
+      // Kullanıcı referansını güncelleyin
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
         classrooms: arrayUnion(classRoomData),
-        });
-      
+      });
+
+      dispatch(addClassToUser(classRoomData)); 
 
       toast.success("Sınıf başarıyla eklendi");
+
+      return classRoomData;
+
     } catch (error) {
       const message = error.message || "Bir hata meydana geldi";
       toast.error(message);
       return isRejectedWithValue({ message });
-      
     }
   }
 );
+
+
 
 export const getClassrooms = createAsyncThunk(
   "classrooms/getClassrooms",

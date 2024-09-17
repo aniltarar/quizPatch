@@ -45,7 +45,7 @@ const Profile = () => {
             setIsEditMode(false)
 
             toast.success("Başarıyla Profil Güncellendi!")
-            dispatch(updateUser(updatedData))
+            dispatch(updateUser(updatedData)) //update
         } catch (error) {
             console.log(error);
         }
