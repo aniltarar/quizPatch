@@ -12,7 +12,6 @@ import FlexContainer from '../containers/FlexContainer'
 import ClassroomManagement from './pages/Classrooms/ClassroomManagement'
 import Classrooms from './pages/Classrooms/Classrooms'
 import Admin from './pages/Admin/Admin'
-import Test from './pages/Test'
 import ClassroomDetail from './pages/Classrooms/ClassroomDetail'
 
 const App = () => {
@@ -59,10 +58,6 @@ const App = () => {
         {
           path:"/profile",
           element : user ? <Profile/> : <Navigate to="/login"/>
-        },
-        {
-          path:"/test",
-          element : <Test/>
         },
         {
           path : "/admin",

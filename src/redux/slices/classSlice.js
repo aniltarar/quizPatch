@@ -151,6 +151,25 @@ export const getClassrooms = createAsyncThunk(
 );
 
 
+export const deleteClassrooms = createAsyncThunk("classrooms/deleteClassrooms", async ({id,classrooms,user}) => {
+
+  try {
+      const newClassrooms = user.classrooms.filter((cr) => cr.id !== id);
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, { classrooms: newClassrooms }); // firebase
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...user, classrooms: newClassrooms }) // localstorage
+      );
+      toast.success("Sınıf silindi!");
+    } catch (error) {
+      console.log("Bir hata oluştu: " + (error.message || error));
+    }
+}
+
+)
+
+
 
 
 export const { reset, setClassrooms } = classSlice.actions;

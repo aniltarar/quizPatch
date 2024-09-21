@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllStudents } from '~/redux/slices/studentSlice';
 import { getAllTeachers } from '~/redux/slices/teacherSlice';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { addClassroom } from '~/redux/slices/classSlice';
+import { addClassroom,setClassrooms } from '~/redux/slices/classSlice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import {addClassToUser} from '~/redux/slices/userSlice';
@@ -34,10 +34,11 @@ const AddClassroom = () => {
     const { register, handleSubmit } = useForm();
     
 
-    const addArray = (data) => {
+    const addNewClassroom = (data) => {
       try {
         const classData = { ...data, students: selectedStudent, teachers: selectedTeacher };
         dispatch(addClassroom({ data: classData, user })); //firebase
+        dispatch(setClassrooms(classData))
       } catch (error) {
         console.error('Error adding array:', error);
       }
@@ -46,7 +47,7 @@ const AddClassroom = () => {
 
     return (
         <div className="w-100 bg-zinc-100 rounded-xl p-3 mx-3">
-      <form onSubmit={handleSubmit(addArray)}>
+      <form onSubmit={handleSubmit(addNewClassroom)}>
         <div className="formArea flex flex-col p-5 gap-y-2">
           <h1 className="text-center text-2xl">Sınıf Ekle</h1>
           <div className="flex flex-col">

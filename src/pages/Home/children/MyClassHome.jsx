@@ -5,10 +5,16 @@ import ReactPaginate from 'react-paginate';
 import { db } from '~/firebase/firebaseConfig';
 import { deleteDoc, doc ,updateDoc} from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteClassrooms } from '~/redux/slices/classSlice';
 
 const MyClassHome = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(0); 
+  const dispatch = useDispatch()
   const itemsPerPage = 4; 
+
+  const {classrooms} = useSelector(state => state.classrooms.classrooms)
+
 
   const offset = currentPage * itemsPerPage;
 
@@ -21,30 +27,8 @@ const MyClassHome = ({ user }) => {
   };
 
 
-
-  const deleteClassRoom = async(classroom) => {
-    try {
-      const classroomRef = doc(db,"classrooms",classroom.id)
-      const userRef = doc(db,"users",user.uid)
-      await deleteDoc(classroomRef, classroom)
-
-      const deletedClassRoom = user.classrooms.filter((classR) => classR.id !== classroom.id) 
-
-      await updateDoc(userRef, {
-        classrooms: deletedClassRoom
-      })
-
-      
-      // mevcut durum: firebase'den siliyoruz(user), ancak state ve local güncellerken hata aliyoruz. 
-      // teachers collection ve students collectiondan classrooms güncelleme eklenecek.
-  
-
-
-      toast.success("Başarıyla Silindi.", {autoClose: 300})
-      
-    } catch (error) {
-      console.log(error)
-    }
+  const deleteClassRoom = (id) => {
+    dispatch(deleteClassrooms({id,classrooms,user}))
   }
 
 
@@ -61,12 +45,13 @@ const MyClassHome = ({ user }) => {
                 <span>{classroom?.className}</span>
                 <span>Öğretmenler : {classroom.teachers.map((teacher) => teacher.displayName).join(', ')}</span>
                 <span>Öğrenci Sayısı : {classroom.students.length}</span>
+                <span>ID : {classroom.id}</span>
               </div>
               <div className='flex gap-x-1'>
               <Link to={`/classroom/${classroom.id}`} className='text-xl  text-blue-600  flex justify-center items-center  rounded-md'>
                 <BiDetail />
               </Link>
-              <button onClick={() => deleteClassRoom(classroom)} to={`/classroom/${classroom.id}`} className='text-xl  text-red-600  flex justify-center items-center  rounded-md'>
+              <button onClick={() => deleteClassRoom(classroom.id)} to={`/classroom/${classroom.id}`} className='text-xl  text-red-600  flex justify-center items-center  rounded-md'>
                 <BiTrash/>
               </button>
               </div>
