@@ -23,7 +23,6 @@ export const userSlice = createSlice({
     addClassToUser: (state, action) => {
       const updatedClassrooms = [...state.user.classrooms, action.payload];
       state.user = { ...state.user, classrooms: updatedClassrooms };
-    
       localStorage.setItem('user', JSON.stringify(state.user));
     },
   },

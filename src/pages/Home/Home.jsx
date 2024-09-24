@@ -1,23 +1,38 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import MyClassHome from './children/MyClassHome';
-import MyProfileHome from './children/MyProfileHome';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getClassromByUserID } from '~/redux/slices/classSlice';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '~/firebase/firebaseConfig';
 
 const Home = () => {
 
-  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { user } = useSelector(state => state.user); 
+  const {userClassrooms} = useSelector(state => state.classrooms);
 
+
+
+  useEffect(() => {
+    dispatch(getClassromByUserID(user.uid)); 
+  }, [dispatch, user.uid]);
 
   return (
-    <div className="sm:grid sm:grid-cols-5 sm:grid-rows-4 sm:gap-4 max-h-screen p-5 flex flex-col gap-y-5 px-12">
-      <MyProfileHome user={user}/>
-      <MyClassHome user={user}/>
-      <div className="col-span-2 row-span-2 col-start-1 row-start-3 bg-blue-500">AKTİF SINAVLAR</div>
-      <div className="col-span-3 row-span-2 col-start-3 row-start-3 bg-violet-500">SONUÇLARIM</div>
+    <div>
+      <h1>Anasayfa</h1>
+      <h2>Kullanıcıya Ait Sınıflar</h2>
+      {userClassrooms?.length > 0 ? (
+        <ul>
+          {userClassrooms.map((classroom) => (
+            <li key={classroom.id}>
+             {classroom.className}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Kullanıcıya ait sınıf bulunamadı.</p>
+      )}
     </div>
   );
 };
 
 export default Home;
-
-

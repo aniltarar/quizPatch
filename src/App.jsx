@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import {Navigate, Outlet, RouterProvider, createBrowserRouter} from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Login from './pages/Auth/Login'
@@ -7,12 +6,10 @@ import Header from './components/Header/Header'
 import Profile from './pages/Profile/Profile'
 import { ToastContainer } from 'react-toastify'
 import {  useSelector } from 'react-redux'
-import 'react-toastify/dist/ReactToastify.css';
 import FlexContainer from '../containers/FlexContainer'
-import ClassroomManagement from './pages/Classrooms/ClassroomManagement'
-import Classrooms from './pages/Classrooms/Classrooms'
-import Admin from './pages/Admin/Admin'
-import ClassroomDetail from './pages/Classrooms/ClassroomDetail'
+import 'react-toastify/dist/ReactToastify.css';
+import TeacherClassroom from './pages/Classrooms/Teacher/TeacherClassroom'
+import StudentClassroom from './pages/Classrooms/Student/StudentClassroom'
 
 const App = () => {
 
@@ -40,32 +37,24 @@ const App = () => {
           element : user ? <Home/> : <Navigate to="/login"/>
          },
         {
-          path : "register",
+          path : "/register",
           element :<Register/>
         },
         {
-          path : "login",
+          path : "/login",
           element :<Login/>
-        },
-        {
-          path :"classrooms",
-          element : user && user.userRole === "student" ? <Classrooms/> : <Navigate to="/"/>
-        },
-        {
-          path :"classrooms-management",
-          element : user && user.userRole === "teacher" ? <ClassroomManagement/> : <Navigate to="/"/>
         },
         {
           path:"/profile",
           element : user ? <Profile/> : <Navigate to="/login"/>
         },
         {
-          path : "/admin",
-          element : user && user.userRole === "admin" ? <Admin/> : <Navigate to="/login"/>
+          path: "/classrooms-management",
+          element : user?.userRole === "teacher" ? <TeacherClassroom/> : <Navigate to="/login"/>
         },
         {
-          path : "classroom/:id",
-          element : <ClassroomDetail/>
+          path: "/my-classrooms",
+          element : user?.userRole === "student" ? <StudentClassroom/> : <Navigate to="/login"/>
         }
       ]
     }

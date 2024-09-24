@@ -1,19 +1,10 @@
-import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
-import {
-  collection,
-  doc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { collection, setDoc,doc, getDocs, query, where, deleteDoc } from "firebase/firestore";
+import { set } from "react-hook-form";
 import { db } from "~/firebase/firebaseConfig";
-import { toast } from "react-toastify";
-import { addClassToUser } from "./userSlice";
-
 
 const initialState = {
-  classrooms: [],
+  userClassrooms: [],
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -24,155 +15,95 @@ const classSlice = createSlice({
   name: "classrooms",
   initialState,
   reducers: {
-    setClassrooms: (state, action) => {
-      state.classrooms = action.payload;
-    },
-
-    reset: (state) => {
-      state.isSuccess = false;
-      state.isLoading = false;
-      state.isError = false;
-      state.message = "";
-    },
+    setUserClassrooms:(state,action)=>{
+      state.userClassrooms = action.payload
+    }
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(addClassroom.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addClassroom.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.classrooms = action.payload;
-      })
-      .addCase(addClassroom.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.error.message || "Bir Hata Meydana Geldi";
-      })
-      .addCase(getClassrooms.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getClassrooms.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.classrooms = action.payload;
-        
-      })
-      .addCase(getClassrooms.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.error.message || "Bir Hata Meydana Geldi";
-      });
-  },
+  extraReducers:(builder)=>{
+    builder.addCase(getClassromByUserID.pending,(state,action)=>{
+      state.isLoading = true
+    })
+    .addCase(getClassromByUserID.fulfilled,(state,action)=>{
+      state.isLoading = false
+      state.isSuccess = true
+      state.userClassrooms = action.payload
+    })
+    .addCase(getClassromByUserID.rejected,(state,action)=>{
+      state.isLoading = false
+      state.isError = true
+      state.message = action.error.message
+    })
+    .addCase(addClassroom.pending,(state,action)=>{
+      state.isLoading = true
+    })
+    .addCase(addClassroom.fulfilled,(state,action)=>{
+      state.isLoading = false
+      state.isSuccess = true
+      // state.userClassrooms.push(action.payload)
+    })
+    .addCase(addClassroom.rejected,(state,action)=>{
+      state.isLoading = false
+      state.isError = true
+      state.message = action.error.message
+    })
+    .addCase(deleteClassroomByID.pending,(state,action)=>{
+      state.isLoading = true
+    })
+    .addCase(deleteClassroomByID.fulfilled,(state,action)=>{
+      state.isLoading = false
+      state.isSuccess = true
+      // state.userClassrooms = state.userClassrooms.filter((classroom)=>classroom.id !== action.payload.id)
+    })
+    .addCase(deleteClassroomByID.rejected,(state,action)=>{
+      state.isLoading = false
+      state.isError = true
+      state.message = action.error.message
+    })
+  }
 });
 
-export const addClassroom = createAsyncThunk(
-  "classrooms/addClassroom",
-  async ({ data, user }, { dispatch }) => { // dispatch'i ekleyin
-    try {
-      // Öğrenci ve öğretmenlerden classrooms bilgisini çıkar
-      const restStudents = data.students.map(({ classrooms, ...rest }) => rest);
-      const restTeachers = data.teachers.map(({ classrooms, ...rest }) => rest);
-
-      // Yeni classroom için bir referans oluşturun
-      const classroomRef = doc(collection(db, "classrooms"));
-
-      // Classroom'u Firestore'a kaydedin
-      await setDoc(classroomRef, {
-        className: data.className,
-        classDescription: data.classDescription,
-        students: restStudents,
-        teachers: restTeachers,
-      });
-
-      // classroomRef'in ID'sini alın ve classData'ya ekleyin
-      const classRoomData = {
-        id: classroomRef.id, 
-        className: data.className,
-        classDescription: data.classDescription,
-        teachers: restTeachers,
-        students: restStudents,
-      };
-
-
-      // Öğretmen ve öğrenci referanslarını güncelleyin
-      const teachers = data.teachers;
-      for (const teacher of teachers) {
-        const teacherRef = doc(db, "teachers", teacher.uid);
-        await updateDoc(teacherRef, {
-          classrooms: arrayUnion(classRoomData),
-        });
-      }
-
-      const students = data.students;
-      for (const student of students) {
-        const studentRef = doc(db, "students", student.uid);
-        await updateDoc(studentRef, {
-          classrooms: arrayUnion(classRoomData),
-        });
-      }
-
-      // Kullanıcı referansını güncelleyin
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-        classrooms: arrayUnion(classRoomData),
-      });
-
-      dispatch(addClassToUser(classRoomData)); 
-
-      toast.success("Sınıf başarıyla eklendi");
-
-      return classRoomData;
-
-    } catch (error) {
-      const message = error.message || "Bir hata meydana geldi";
-      toast.error(message);
-      return isRejectedWithValue({ message });
-    }
+export const addClassroom = createAsyncThunk("addClassroom",async (classroomInfo)=>{
+  try{
+    const classroomsRef = doc(collection(db,"classrooms"))
+    await setDoc(classroomsRef,{
+      id: classroomsRef.id,
+      ...classroomInfo
+    })
+    return classroomInfo
   }
-);
-
-
-
-export const getClassrooms = createAsyncThunk(
-  "classrooms/getClassrooms",
-  async () => {
-    try {
-      const allClassroomsRef = collection(db, "classrooms");
-      const snapshot = await getDocs(allClassroomsRef);
-      const classroomsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      return classroomsData;
-    } catch (error) {
-      console.log("Error getting classrooms", error);
-    }
+  catch(error){
+    console.log("addClassroom -> error", error)
   }
-);
+})
 
+export const deleteClassroomByID = createAsyncThunk("deleteClassroomByID",async(classroomID)=>{
+  try{
+    const classroomRef = doc(db,"classrooms",classroomID)
+    await deleteDoc(classroomRef)
+  } 
+  catch(error){
+    console.log("deleteClassroomByID -> error", error)
+  } 
+})
 
-export const deleteClassrooms = createAsyncThunk("classrooms/deleteClassrooms", async ({id,classrooms,user}) => {
-
-  try {
-      const newClassrooms = user.classrooms.filter((cr) => cr.id !== id);
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, { classrooms: newClassrooms }); // firebase
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ ...user, classrooms: newClassrooms }) // localstorage
-      );
-      toast.success("Sınıf silindi!");
-    } catch (error) {
-      console.log("Bir hata oluştu: " + (error.message || error));
-    }
+export const getClassromByUserID = createAsyncThunk("getClassromByUserID",async (userID)=>{
+  try{
+        const classroomsRef = await getDocs(collection(db, "classrooms"));
+        const classrooms = classroomsRef.docs.map((doc) => ({
+          ...doc.data()
+        }));
+        const filteredClassrooms = classrooms.filter((classroom) =>
+          classroom.selectedTeacher.some((teacher) => teacher.uid === userID)
+        );
+        return filteredClassrooms; 
+  }
+  catch(error){
+    console.error("Error fetching classrooms:", error);
+  }
 }
-
 )
 
 
-
-
-export const { reset, setClassrooms } = classSlice.actions;
+export const { setUserClassrooms} = classSlice.actions;
 
 export default classSlice.reducer;
-
