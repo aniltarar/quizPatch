@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, setDoc,doc, getDocs, query, where, deleteDoc } from "firebase/firestore";
+import { collection, setDoc,doc, getDocs,getDoc, query, where, deleteDoc } from "firebase/firestore";
 import { set } from "react-hook-form";
 import { db } from "~/firebase/firebaseConfig";
 
@@ -102,6 +102,17 @@ export const getClassromByUserID = createAsyncThunk("getClassromByUserID",async 
   }
 }
 )
+
+export const getClassByID = createAsyncThunk("getClassroomByClassroomID",async(id) => {
+  try{
+      const classRef = doc(db, "classrooms", id);
+      const classSnap = await getDoc(classRef);
+      console.log(classSnap.data());
+    
+  }
+  catch(err){
+      console.log(err)
+}})
 
 
 export const { setUserClassrooms} = classSlice.actions;

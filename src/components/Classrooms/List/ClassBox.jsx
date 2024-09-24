@@ -1,6 +1,7 @@
 import React from 'react'
 import { MdOutlineClass ,MdDeleteOutline} from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { deleteClassroomByID, getClassromByUserID } from '~/redux/slices/classSlice'
 
 const ClassBox = ({classroom}) => {
@@ -23,9 +24,9 @@ const ClassBox = ({classroom}) => {
         <button onClick={() => deleteClass(classroom.id)} className='p-2 rounded-md bg-black text-white text-lg border '>
             <MdDeleteOutline/>
         </button>
-        <button className='p-2 rounded-md bg-black text-white text-lg border '>
+        <Link to={`/classroom-detail/${classroom.id}`} className='p-2 rounded-md bg-black text-white text-lg border '>
             <MdOutlineClass/>
-        </button>
+        </Link>
        </div>
     </div>
   )

@@ -7,12 +7,14 @@ import TeacherCard from '../TeacherCard/TeacherCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllTeachers } from '~/redux/slices/teacherSlice';
 import { getAllStudents } from '~/redux/slices/studentSlice';
-import { addClassroom } from '~/redux/slices/classSlice';
+import { addClassroom, getClassromByUserID } from '~/redux/slices/classSlice';
 
 const AddClassroomForm = () => {
   const dispatch = useDispatch();
   const { teachers } = useSelector(state => state.teacher)
   const { students } = useSelector(state => state.student)
+  
+  const {user} = useSelector(state => state.user)
 
 
   const [classMembers,setClassMembers] = useState({
@@ -43,7 +45,7 @@ const AddClassroomForm = () => {
   const AddClassroom = (data) => {
     const fulldata = {...data, selectedTeacher : classMembers.teachers, selectedStudent : classMembers.students}
     dispatch(addClassroom(fulldata))
-
+    dispatch(getClassromByUserID(user.uid))
   }
 
   return (

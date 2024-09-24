@@ -10,6 +10,7 @@ import FlexContainer from '../containers/FlexContainer'
 import 'react-toastify/dist/ReactToastify.css';
 import TeacherClassroom from './pages/Classrooms/Teacher/TeacherClassroom'
 import StudentClassroom from './pages/Classrooms/Student/StudentClassroom'
+import ClassroomDetail from './pages/Classrooms/Detail/ClassroomDetail'
 
 const App = () => {
 
@@ -47,6 +48,10 @@ const App = () => {
         {
           path:"/profile",
           element : user ? <Profile/> : <Navigate to="/login"/>
+        },
+        {
+          path: "/classroom-detail/:id",
+          element : user? <ClassroomDetail/> : <Navigate to="/login"/>
         },
         {
           path: "/classrooms-management",
