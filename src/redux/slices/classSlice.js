@@ -5,6 +5,7 @@ import { db } from "~/firebase/firebaseConfig";
 
 const initialState = {
   userClassrooms: [],
+  currentClassroom:{},
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -59,6 +60,22 @@ const classSlice = createSlice({
       state.isError = true
       state.message = action.error.message
     })
+    .addCase(getClassByID.pending, (state) => {
+        state.isLoading = true
+    })
+    .addCase(getClassByID.fulfilled, (state, action) => {
+      state.isSuccess = true
+      state.isLoading = false
+      state.isError  = false
+      state.currentClassroom = action.payload; // Veriyi state'e kaydediyoruz
+      })
+    .addCase(getClassByID.rejected, (state) => {
+      state.isError = true;
+      state.message = error.message
+      state.isLoading = false;
+      
+
+    });
   }
 });
 
@@ -86,8 +103,10 @@ export const deleteClassroomByID = createAsyncThunk("deleteClassroomByID",async(
   } 
 })
 
+// user id ile o user'a ait sınıfları getirme
 export const getClassromByUserID = createAsyncThunk("getClassromByUserID",async (userID)=>{
   try{
+        
         const classroomsRef = await getDocs(collection(db, "classrooms"));
         const classrooms = classroomsRef.docs.map((doc) => ({
           ...doc.data()
@@ -103,12 +122,12 @@ export const getClassromByUserID = createAsyncThunk("getClassromByUserID",async 
 }
 )
 
+// class id ile sınıf bilgilerini getirme
 export const getClassByID = createAsyncThunk("getClassroomByClassroomID",async(id) => {
   try{
       const classRef = doc(db, "classrooms", id);
       const classSnap = await getDoc(classRef);
-      console.log(classSnap.data());
-    
+      return classSnap.data();
   }
   catch(err){
       console.log(err)

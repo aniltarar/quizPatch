@@ -6,6 +6,7 @@ import { logout } from '~/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { IoExitOutline } from "react-icons/io5";
 import { MdClass } from "react-icons/md";
+import { BiPencil } from "react-icons/bi";
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const Header = () => {
     return (
         <header className='w-full bg-white flex-none min-h-16 px-12 border-b flex justify-between items-center'>
             <Link to="/" className='text-2xl bg-gradient-to-r bg-clip-text text-transparent from-orange-500 to-purple-500 font-bold'>QuizPatch
-                <small className='text-xs'>v0.3.6 </small>
+                <small className='text-xs'>v0.3.7 </small>
             </Link >
 
             <nav className='flex gap-x-5'>
@@ -35,6 +36,10 @@ const Header = () => {
                     <Link to="/classrooms-management" className={`${user.userRole === "teacher" ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
                         <MdClass />
                         Sınıf Yönetimi
+                    </Link>
+                    <Link to="/exam-management" className={`${user.userRole === "teacher" ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+                        <BiPencil />
+                        Sınav Yönetimi
                     </Link>
                     <button onClick={() => dispatch(logout())} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline />Çıkış Yap</button>
                 </div> : tabs.map((item) => (

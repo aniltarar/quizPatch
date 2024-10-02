@@ -16,6 +16,6 @@ export const loginScheme = z.object({
 
 
     export const addClassScheme = z.object({
-        className : z.string().min(1,"Lütfen sınıf adını giriniz."),
-        classDesc : z.string().min(1,"Lütfen sınıfı açıklayacak 1-2 kısa cümle giriniz."),
+        className : z.string(),
+        classDesc : z.string()
     })

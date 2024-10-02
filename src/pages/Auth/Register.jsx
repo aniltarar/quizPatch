@@ -24,6 +24,8 @@ const Register = () => {
  
     try {
       if (isValid) {
+
+
         const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
         const user = userCredential.user;
         await updateProfile(user, {
@@ -38,6 +40,7 @@ const Register = () => {
           userRole: data.role,
           classrooms: []
         }));
+
 
         const teacherRef = doc(collection(db, "teachers"), user.uid);
         const studentRef = doc(collection(db, "students"), user.uid);
@@ -55,6 +58,7 @@ const Register = () => {
           });
         }
 
+     
         // Öğrenci tablosuna kayıt
         if(data.role === "student"){
           await setDoc(studentRef, {

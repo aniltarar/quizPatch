@@ -6,11 +6,12 @@ import Header from './components/Header/Header'
 import Profile from './pages/Profile/Profile'
 import { ToastContainer } from 'react-toastify'
 import {  useSelector } from 'react-redux'
-import FlexContainer from '../containers/FlexContainer'
+import FlexContainer from './containers/FlexContainer'
 import 'react-toastify/dist/ReactToastify.css';
 import TeacherClassroom from './pages/Classrooms/Teacher/TeacherClassroom'
 import StudentClassroom from './pages/Classrooms/Student/StudentClassroom'
 import ClassroomDetail from './pages/Classrooms/Detail/ClassroomDetail'
+import ExamManagement from './pages/Exam/ExamManagament/ExamManagement' 
 
 const App = () => {
 
@@ -60,6 +61,10 @@ const App = () => {
         {
           path: "/my-classrooms",
           element : user?.userRole === "student" ? <StudentClassroom/> : <Navigate to="/login"/>
+        },
+        {
+          path: "/exam-management",
+          element : user?.userRole === "teacher" ? <ExamManagement/> : <Navigate to="/login"/>
         }
       ]
     }

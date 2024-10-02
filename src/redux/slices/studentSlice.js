@@ -54,6 +54,45 @@ export const getAllStudents = createAsyncThunk(
   }
 );
 
+
+// antrenman
+export const addNewStudent = createAsyncThunk("student/addNewStudent", async (student) => {
+
+  try {
+    const studentsRef = collection(db, "students");
+    await setDoc(studentsRef, student);
+    
+  } catch (error) {
+    console.log(error);
+
+  }
+});
+
+export const getStudentByID = createAsyncThunk("student/getStudentByID", async (studentID) => {
+  try{
+    const studentRef = doc(db,"students",studentID);
+    const studentSnap = await getDoc(studentRef);
+    return studentSnap.data();
+  }
+  catch(error){
+    console.log(error);
+  }
+});
+
+export const addLessonToStudent = createAsyncThunk("student/addLessonToStudent", async ({studentID,lessonID}) => {
+  try{
+    const studentRef = doc(db,"students",studentID);
+    await updateDoc(studentRef,{
+      lessons: arrayUnion(lessonID)
+    })
+  }
+  catch(error){
+    console.log(error);
+  }
+});
+// antrenman sonu
+
+
 export const { setStudent,reset } = studentSlice.actions;
 
 export default studentSlice.reducer;
