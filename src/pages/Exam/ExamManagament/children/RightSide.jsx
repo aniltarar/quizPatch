@@ -29,19 +29,19 @@ const RightSide = ({setExamQuestions,examQuestion}) => {
                     <div className="examName grid grid-cols-2 gap-4">
                         <div className="option flex gap-x-2">
                             <input type="text" placeholder='A Şıkkı' {...register("optionA")} className='w-full border  px-4 py-2 rounded-md outline-none' />
-                            <input type="radio" id="a" value="A" name="options" {...register("currentAnswer")} />
+                            <input type="radio" id="a" value="optionA" name="options" {...register("correctAnswer")} />
                         </div>
                         <div className="option flex gap-x-2">
                             <input type="text" placeholder='B Şıkkı' {...register("optionB")} className='w-full border  px-4 py-2 rounded-md outline-none' />
-                            <input type="radio" id="b" value="B" name="options" {...register("currentAnswer")} />
+                            <input type="radio" id="b" value="optionB" name="options" {...register("correctAnswer")} />
                         </div>
                         <div className="option flex gap-x-2">
                             <input type="text" placeholder='C Şıkkı' {...register("optionC")} className='w-full border  px-4 py-2 rounded-md outline-none' />
-                            <input type="radio" id="c" value="C" name="options" {...register("currentAnswer")} />
+                            <input type="radio" id="c" value="optionC" name="options" {...register("correctAnswer")} />
                         </div>
                         <div className="option flex gap-x-2">
                             <input type="text" placeholder='D Şıkkı' {...register("optionD")} className='w-full border px-4 py-2 rounded-md outline-none' />
-                            <input type="radio" id="d" value="D" name="options" {...register("currentAnswer")} />
+                            <input type="radio" id="d" value="optionD" name="options" {...register("correctAnswer")} />
                         </div>
                         <button className='px-2 py-2 bg-green-500 col-span-2 text-white rounded-md'>Soruyu Ekle</button>
                     </div>

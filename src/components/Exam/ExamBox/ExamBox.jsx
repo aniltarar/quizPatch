@@ -1,28 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
+import { deleteExamByID, getMyExamsForTeacher } from '~/redux/slices/examSlice';
 
-const ExamBox = () => {
+const ExamBox = ({exam}) => {
+
+  const {examName,examTime,questions,classroomID,className,examID} = exam;
+  const {user} = useSelector(state => state.user)
+
+  const dispatch = useDispatch()
+
+
+
+  useEffect(() => {
+    dispatch(getMyExamsForTeacher(user.uid))
+  }
+  , [exam])
+  
+
   return (
-    <div className='bg-white p-2 rounded-md'>
+    <div className='bg-white p-2 rounded-md w-full'>
         <div className='flex justify-between items-center'>
-            <h1 className='font-semibold text-lg'>Sınav Adı</h1>
-            <div className='flex gap-x-2'>
+            <h1 className='font-semibold text-lg'>Sınav Bilgisi: {examName}</h1>
+            <div className='flex gap-x-2 items-center justify-center'>
             <button className='bg-blue-500 text-white px-2 py-1 rounded-md'>Düzenle</button>
-            <button className='bg-red-500 text-white px-2 py-1 rounded-md'>Sil</button>
+            <button className='bg-red-500 text-white px-2 py-1 rounded-md'  >Sil</button>
             </div>
         </div>
         <div className='flex gap-x-2 mt-2'>
             <div className='flex gap-x-2'>
-            <p className='font-semibold'>Süre:</p>
-            <p>60 dk</p>
+            <p className='font-semibold'>Süre: {examTime} Dakika</p>
+            </div>
+            
+            <div className='flex gap-x-2'>
+            <p className='font-semibold'>Soru Sayısı: {questions.length}</p>
             </div>
             <div className='flex gap-x-2'>
-            <p className='font-semibold'>Soru Sayısı:</p>
-            <p>10</p>
+            <p className='font-semibold'>Sınıf: {className}</p>
             </div>
-            <div className='flex gap-x-2'>
-            <p className='font-semibold'>Sınıf:</p>
-            <p>Coğrafya</p>
-            </div>
+            
         </div>
     </div>
   )

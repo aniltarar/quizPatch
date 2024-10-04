@@ -12,6 +12,7 @@ import TeacherClassroom from './pages/Classrooms/Teacher/TeacherClassroom'
 import StudentClassroom from './pages/Classrooms/Student/StudentClassroom'
 import ClassroomDetail from './pages/Classrooms/Detail/ClassroomDetail'
 import ExamManagement from './pages/Exam/ExamManagament/ExamManagement' 
+import MyExams from './pages/Exam/MyExams/MyExams'
 
 const App = () => {
 
@@ -51,6 +52,10 @@ const App = () => {
           element : user ? <Profile/> : <Navigate to="/login"/>
         },
         {
+          path:"/my-exams",
+          element : user ? <MyExams/> : <Navigate to="/login"/>
+        },
+        {
           path: "/classroom-detail/:id",
           element : user? <ClassroomDetail/> : <Navigate to="/login"/>
         },
@@ -62,6 +67,7 @@ const App = () => {
           path: "/my-classrooms",
           element : user?.userRole === "student" ? <StudentClassroom/> : <Navigate to="/login"/>
         },
+        
         {
           path: "/exam-management",
           element : user?.userRole === "teacher" ? <ExamManagement/> : <Navigate to="/login"/>
