@@ -31,33 +31,38 @@ const ExamDetail = () => {
 
     const saveExam = async (data) => {
         try {
-            // Sorunun bulunduğu dizindeki index'i bul
-            const questionIndex = questions.findIndex(
-                (question) => question.id === selectedQuestion.id
-            )
-
-            if (questionIndex !== -1) {
-                // Güncellenmiş soruyu dizinin ilgili indexine ekleyerek diziyi güncelle
-                const updatedQuestions = [...questions]
-                updatedQuestions[questionIndex] = {
-                    ...selectedQuestion,
-                    ...data
-                }
-
-                // Firestore'daki sınav belgesini referans al
-                const examDocRef = doc(db, 'exams', id)
-
-                // Firestore'da questions dizisini güncelle
-                await updateDoc(examDocRef, {
-                    questions: updatedQuestions
+            const examRef = doc(db, 'exams', id)
+            await updateDoc(examRef, {
+                questions: questions.map((question) => {
+                    if (question.id === selectedQuestion.id) {
+                        return {
+                            ...question,
+                            ...data
+                        }
+                    }
+                    return question
                 })
-
-                toast.success('Soru başarıyla güncellendi.')
-            }
+            })
+            toast.success('Soru başarıyla güncellendi')
+            dispatch(getExamDetailByID(id))
         } catch (error) {
-            console.log('Soru güncelleme hatası:', error)
+            toast.error('Soru güncellenirken bir hata oluştu')
         }
     }
+
+    const deleteQuestion = async (questionID) => {
+        try {
+            const examRef = doc(db, 'exams', id)
+            await updateDoc(examRef, {
+                questions: questions.filter((question) => question.id !== questionID)
+            })
+            toast.success('Soru başarıyla silindi')
+            dispatch(getExamDetailByID(id))
+        } catch (error) {
+            toast.error('Soru silinirken bir hata oluştu')
+        }
+    }
+
 
     return (
         <div className="w-full flex gap-x-5">
@@ -71,7 +76,7 @@ const ExamDetail = () => {
                             </div>
                             <div className="flex gap-x-2">
                                 <button onClick={() => setSelectedQuestion(question)}>düzenle</button>
-                                <button>sil</button>
+                                <button onClick={()=>deleteQuestion(question.id)}>sil</button>
                             </div>
                         </div>
                     ))}
@@ -153,3 +158,4 @@ const ExamDetail = () => {
 }
 
 export default ExamDetail
+

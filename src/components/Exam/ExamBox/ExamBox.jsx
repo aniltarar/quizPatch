@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteExamByID, getMyExamsForTeacher } from '~/redux/slices/examSlice';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ExamBox = ({exam}) => {
 
@@ -12,9 +13,18 @@ const ExamBox = ({exam}) => {
 
   const confirmDelete = () => {
     const confirm = window.confirm('Bu sınavı silmek istediğinize emin misiniz?')
-    if(confirm){
-      dispatch(deleteExamByID(examID))
-      dispatch(getMyExamsForTeacher(user.uid))
+    try{
+      if(confirm){
+        dispatch(deleteExamByID(examID))
+        dispatch(getMyExamsForTeacher(user.uid))
+        toast.success('Sınav başarıyla silindi.') 
+    }
+  }
+    catch(error){
+
+      console.log(error.message)
+      toast.error('Sınav silinirken bir hata oluştu.')
+  
     }
   }
   return (

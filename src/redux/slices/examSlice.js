@@ -73,7 +73,23 @@ export const examSlice = createSlice({
             state.isSuccess = false
             state.isError = true
         })
+        .addCase(deleteExamByID.pending,(state)=>{
+            state.isLoading = true
+            state.isError = false
+            state.isSuccess = false
+        })
+        .addCase(deleteExamByID.fulfilled,(state)=>{
+            state.isLoading = false
+            state.isError = false
+            state.isSuccess = true
+        })
+        .addCase(deleteExamByID.rejected,(state)=>{
+            state.isLoading = false
+            state.isSuccess = false
+            state.isError = true
+        })
         
+
     }
 })
 

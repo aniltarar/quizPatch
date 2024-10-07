@@ -12,8 +12,16 @@ const RightSide = ({setExamQuestions,examQuestion}) => {
     const dispatch = useDispatch();
 
     const addQuestions = (data) => {
+      // data'ya her soru için id verilmesi gerekiyor.
+      // id'yi random bir şekilde oluşturup data'ya ekleyebilirsin.
+      const questionID = Math.random().toString(36).substr(2, 9);
+
+      const newData = {
+        ...data,
+        id: questionID,
+      }
         try {
-          setExamQuestions(prev => [...prev,data]);
+          setExamQuestions(prev => [...prev,newData]);
           reset(); 
         } catch (error) {
           console.log(error);
