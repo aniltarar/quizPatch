@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToExam, getMyExamsForTeacher } from '~/redux/slices/examSlice';
+import { getClassromByUserID } from '~/redux/slices/classSlice';
+import { addToExam,  } from '~/redux/slices/examSlice';
 
 const LeftSide = ({ examQuestions }) => {
 
@@ -13,7 +14,6 @@ const LeftSide = ({ examQuestions }) => {
 
     const addExam = (data) => {
         try {
-    
             const { id: classroomID, className } = JSON.parse(data.classroomInfo);
             const examFullData = {
                 ...data,
@@ -31,8 +31,8 @@ const LeftSide = ({ examQuestions }) => {
     }
 
     useEffect(() => {
-        dispatch(getMyExamsForTeacher(user.uid));
-    },[addExam])
+        dispatch(getClassromByUserID(user.uid));
+    },[])
 
     const isValid = examQuestions.length >= 1;
 

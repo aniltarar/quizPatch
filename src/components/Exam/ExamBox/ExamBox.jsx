@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteExamByID, getMyExamsForTeacher } from '~/redux/slices/examSlice';
+import { Link } from 'react-router-dom';
 
 const ExamBox = ({exam}) => {
 
@@ -9,25 +10,19 @@ const ExamBox = ({exam}) => {
 
   const dispatch = useDispatch()
 
-const confirmDelete = () => {
-  const confirm = window.confirm('Bu sınavı silmek istediğinize emin misiniz?')
-  if(confirm){
-    dispatch(deleteExamByID(examID))
+  const confirmDelete = () => {
+    const confirm = window.confirm('Bu sınavı silmek istediğinize emin misiniz?')
+    if(confirm){
+      dispatch(deleteExamByID(examID))
+      dispatch(getMyExamsForTeacher(user.uid))
+    }
   }
-}
-
-  // useEffect(() => {
-  //   dispatch(getMyExamsForTeacher(user.uid))
-  // }
-  // , [exam])
-  
-
   return (
     <div className='bg-white p-2 rounded-md w-full'>
         <div className='flex justify-between items-center'>
             <h1 className='font-semibold text-lg'>Sınav Bilgisi: {examName}</h1>
             <div className='flex gap-x-2 items-center justify-center'>
-            <button className='bg-blue-500 text-white px-2 py-1 rounded-md' >Düzenle</button>
+            <Link to={ `/exam-detail/${examID}`} className='bg-blue-500 text-white px-2 py-1 rounded-md' >Detay</Link>
             <button className='bg-red-500 text-white px-2 py-1 rounded-md' onClick={confirmDelete} >Sil</button>
             </div>
         </div>

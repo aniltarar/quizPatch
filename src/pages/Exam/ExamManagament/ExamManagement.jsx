@@ -17,13 +17,11 @@ const ExamManagement = () => {
     const [examQuestions, setExamQuestions] = useState([]);
     const [examInfo, setExamInfo] = useState(null)
 
+    
 
     useEffect(() => {
-        dispatch(getClassromByUserID(user.uid));
-    }, []);
-
-
-    
+        dispatch(getMyExamsForTeacher(user.uid))
+    },[])
 
     return (
         <div className='w-full bg-blue-500 h-screen p-5 flex flex-col gap-y-3'>
@@ -32,15 +30,6 @@ const ExamManagement = () => {
                 <LeftSide examInfo={examInfo} setExamInfo={setExamInfo} examQuestions={examQuestions} />
                 <RightSide examQuestions={examQuestions} setExamQuestions={setExamQuestions} />
             </div>
-
-            <h1 className='text-4xl font-semibold'>Sınavlarım</h1>
-            <div className='w-full grid grid-flow-row grid-cols-2 gap-3'>
-                {exams?.map((exam, index) => (
-                    <ExamBox key={index} exam={exam} />
-                ))}
-            </div>
-
-          
         </div>
     )
 }

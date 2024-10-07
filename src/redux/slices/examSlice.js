@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "~/firebase/firebaseConfig";
 
 const initialState = {
@@ -33,7 +33,8 @@ export const examSlice = createSlice({
             state.isLoading = false
             state.isError = false
             state.isSuccess = true
-            state.exams = action.payload
+            state.exams = [...state.exams, action.payload]
+
         })
         .addCase(addToExam.rejected,(state)=>{
             state.isLoading = false
@@ -56,6 +57,23 @@ export const examSlice = createSlice({
             state.isSuccess = false
             state.isError = true
         })
+        .addCase(getExamDetailByID.pending,(state)=>{
+            state.isLoading = true
+            state.isError = false
+            state.isSuccess = false
+        })
+        .addCase(getExamDetailByID.fulfilled,(state,action)=>{
+            state.isLoading = false
+            state.isError = false
+            state.isSuccess = true
+            state.currentExam = action.payload
+        })
+        .addCase(getExamDetailByID.rejected,(state)=>{
+            state.isLoading = false
+            state.isSuccess = false
+            state.isError = true
+        })
+        
     }
 })
 
@@ -68,6 +86,8 @@ export const addToExam = createAsyncThunk("exams/addToExam", async(exam,{rejectW
             
         })
         console.log("Exam added successfully");
+        return exam
+        
     } catch (error) {
         console.log(error.message);
         return rejectWithValue(error.message)
@@ -79,7 +99,7 @@ export const addToExam = createAsyncThunk("exams/addToExam", async(exam,{rejectW
             const examsRef = collection(db,"exams")
             const examsSnapshot = await getDocs(examsRef)
             const exams = examsSnapshot.docs.map((doc)=>({...doc.data()}))
-            const filteredMyExams = exams.filter((exam)=>exam.addedUser===userID);
+            const filteredMyExams = exams.filter((exam)=>exam.addedUser === userID);
             return filteredMyExams
         } catch (error) {
             console.log(error.message);
@@ -87,19 +107,6 @@ export const addToExam = createAsyncThunk("exams/addToExam", async(exam,{rejectW
         }
     })
 
-    export const getExamsByClassroomID = createAsyncThunk("exams/getExamsByClassroomID", async(classroomID,{rejectWithValue}) => {
-        try {
-            const examsRef = collection(db,"exams")
-            const examsSnapshot = await getDocs(examsRef)
-            const exams = examsSnapshot.docs.map((doc)=>({...doc.data()}))
-            const filteredExams = exams.filter((exam)=>exam.classroomID===classroomID);
-            return filteredExams
-        } catch (error) {
-            console.log(error.message);
-            return rejectWithValue(error.message)
-        }
-    }
-    )
 
     export const deleteExamByID = createAsyncThunk("exams/deleteExamByID",async(examID,{rejectWithValue})=>{
         try {
@@ -111,6 +118,20 @@ export const addToExam = createAsyncThunk("exams/addToExam", async(exam,{rejectW
             return rejectWithValue(error.message)
         }
     })
+
+    export const getExamDetailByID = createAsyncThunk("exams/getExamDetailByID",async(examID,{rejectWithValue})=>{
+        try{
+
+            const examRef = doc(db,"exams",examID);
+            const exam = await getDoc(examRef);
+            return exam.data()
+
+        }
+        catch(error){
+            console.log(error.message);
+            return rejectWithValue(error.message)
+        }
+    }) 
 
     
 export const { setCurrentExam,setExams } = examSlice.actions;

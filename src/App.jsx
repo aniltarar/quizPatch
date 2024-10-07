@@ -13,6 +13,7 @@ import StudentClassroom from './pages/Classrooms/Student/StudentClassroom'
 import ClassroomDetail from './pages/Classrooms/Detail/ClassroomDetail'
 import ExamManagement from './pages/Exam/ExamManagament/ExamManagement' 
 import MyExams from './pages/Exam/MyExams/MyExams'
+import ExamDetail from './pages/Exam/Detail/ExamDetail'
 
 const App = () => {
 
@@ -58,6 +59,10 @@ const App = () => {
         {
           path: "/classroom-detail/:id",
           element : user? <ClassroomDetail/> : <Navigate to="/login"/>
+        },
+        {
+          path: "/exam-detail/:id",
+          element : user? <ExamDetail/> : <Navigate to="/login"/>
         },
         {
           path: "/classrooms-management",
