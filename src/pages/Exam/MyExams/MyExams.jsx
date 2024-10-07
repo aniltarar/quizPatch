@@ -12,14 +12,10 @@ const {exams} = useSelector(state => state.exam)
 const {userClassrooms} = useSelector(state => state.classrooms)
 
 
-
-
-
-useEffect(() => {
-    dispatch(getClassromByUserID(user.uid));
-    dispatch(getMyExamsForTeacher(user.uid))
-},[dispatch])
-
+// useEffect(() => {
+//     dispatch(getClassromByUserID(user.uid));
+//     dispatch(getMyExamsForTeacher(user.uid))
+// },[dispatch])
 
 
 

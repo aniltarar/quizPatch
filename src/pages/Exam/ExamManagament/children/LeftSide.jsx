@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToExam } from '~/redux/slices/examSlice';
+import { addToExam, getMyExamsForTeacher } from '~/redux/slices/examSlice';
 
 const LeftSide = ({ examQuestions }) => {
 
@@ -29,6 +29,10 @@ const LeftSide = ({ examQuestions }) => {
             console.log(error.message);
         }
     }
+
+    useEffect(() => {
+        dispatch(getMyExamsForTeacher(user.uid));
+    },[addExam])
 
     const isValid = examQuestions.length >= 1;
 

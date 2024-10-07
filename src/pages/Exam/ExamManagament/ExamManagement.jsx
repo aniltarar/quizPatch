@@ -20,8 +20,7 @@ const ExamManagement = () => {
 
     useEffect(() => {
         dispatch(getClassromByUserID(user.uid));
-        dispatch(getMyExamsForTeacher(user.uid));
-    }, [dispatch, user.uid, exams]);
+    }, []);
 
 
     
