@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 import { deleteExamByID, getMyExamsForTeacher } from '~/redux/slices/examSlice';
 
 const ExamBox = ({exam}) => {
@@ -10,12 +9,17 @@ const ExamBox = ({exam}) => {
 
   const dispatch = useDispatch()
 
-
-
-  useEffect(() => {
-    dispatch(getMyExamsForTeacher(user.uid))
+const confirmDelete = () => {
+  const confirm = window.confirm('Bu sınavı silmek istediğinize emin misiniz?')
+  if(confirm){
+    dispatch(deleteExamByID(examID))
   }
-  , [exam])
+}
+
+  // useEffect(() => {
+  //   dispatch(getMyExamsForTeacher(user.uid))
+  // }
+  // , [exam])
   
 
   return (
@@ -23,8 +27,8 @@ const ExamBox = ({exam}) => {
         <div className='flex justify-between items-center'>
             <h1 className='font-semibold text-lg'>Sınav Bilgisi: {examName}</h1>
             <div className='flex gap-x-2 items-center justify-center'>
-            <button className='bg-blue-500 text-white px-2 py-1 rounded-md'>Düzenle</button>
-            <button className='bg-red-500 text-white px-2 py-1 rounded-md'  >Sil</button>
+            <button className='bg-blue-500 text-white px-2 py-1 rounded-md' >Düzenle</button>
+            <button className='bg-red-500 text-white px-2 py-1 rounded-md' onClick={confirmDelete} >Sil</button>
             </div>
         </div>
         <div className='flex gap-x-2 mt-2'>

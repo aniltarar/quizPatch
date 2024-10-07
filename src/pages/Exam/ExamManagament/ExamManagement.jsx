@@ -21,9 +21,10 @@ const ExamManagement = () => {
     useEffect(() => {
         dispatch(getClassromByUserID(user.uid));
         dispatch(getMyExamsForTeacher(user.uid));
-    }, [dispatch, user.uid,exams]);
+    }, [dispatch, user.uid, exams]);
 
 
+    
 
     return (
         <div className='w-full bg-blue-500 h-screen p-5 flex flex-col gap-y-3'>
@@ -34,18 +35,15 @@ const ExamManagement = () => {
             </div>
 
             <h1 className='text-4xl font-semibold'>Sınavlarım</h1>
-
-
             <div className='w-full grid grid-flow-row grid-cols-2 gap-3'>
                 {exams?.map((exam, index) => (
                     <ExamBox key={index} exam={exam} />
                 ))}
             </div>
 
+          
         </div>
     )
 }
 
 export default ExamManagement
-
-

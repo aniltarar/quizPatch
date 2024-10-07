@@ -87,6 +87,20 @@ export const addToExam = createAsyncThunk("exams/addToExam", async(exam,{rejectW
         }
     })
 
+    export const getExamsByClassroomID = createAsyncThunk("exams/getExamsByClassroomID", async(classroomID,{rejectWithValue}) => {
+        try {
+            const examsRef = collection(db,"exams")
+            const examsSnapshot = await getDocs(examsRef)
+            const exams = examsSnapshot.docs.map((doc)=>({...doc.data()}))
+            const filteredExams = exams.filter((exam)=>exam.classroomID===classroomID);
+            return filteredExams
+        } catch (error) {
+            console.log(error.message);
+            return rejectWithValue(error.message)
+        }
+    }
+    )
+
     export const deleteExamByID = createAsyncThunk("exams/deleteExamByID",async(examID,{rejectWithValue})=>{
         try {
             const examRef = doc(db,"exams",examID)
