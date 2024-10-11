@@ -14,6 +14,8 @@ import ClassroomDetail from './pages/Classrooms/Detail/ClassroomDetail'
 import ExamManagement from './pages/Exam/ExamManagament/ExamManagement' 
 import MyExams from './pages/Exam/MyExams/MyExams'
 import ExamDetail from './pages/Exam/Detail/ExamDetail'
+import EnterExam from './pages/Exam/EnterExam/EnterExam'
+import StudentClassroomDetail from './pages/Classrooms/Student/StudentClassroomDetail'
 
 const App = () => {
 
@@ -58,15 +60,23 @@ const App = () => {
         },
         {
           path: "/classroom-detail/:id",
-          element : user? <ClassroomDetail/> : <Navigate to="/login"/>
+          element : user ? <ClassroomDetail/> : <Navigate to="/login"/>
+        },
+        {
+          path: "/student-classroom-detail/:id",
+          element : user ? <StudentClassroomDetail/> : <Navigate to="/login"/>
         },
         {
           path: "/exam-detail/:id",
-          element : user? <ExamDetail/> : <Navigate to="/login"/>
+          element : user ? <ExamDetail/> : <Navigate to="/login"/>
         },
         {
           path: "/classrooms-management",
           element : user?.userRole === "teacher" ? <TeacherClassroom/> : <Navigate to="/login"/>
+        },
+        {
+          path: "/enter-exam/:id",
+          element : user?.userRole === "student" ? <EnterExam  /> : <Navigate to="/login"/>
         },
         {
           path: "/my-classrooms",

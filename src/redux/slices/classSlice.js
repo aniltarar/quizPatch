@@ -34,6 +34,19 @@ const classSlice = createSlice({
       state.isError = true
       state.message = action.error.message
     })
+    builder.addCase(getClassroomByUserIDStudent.pending,(state)=>{
+      state.isLoading = true
+    })
+    .addCase(getClassroomByUserIDStudent.fulfilled,(state,action)=>{
+      state.isLoading = false
+      state.isSuccess = true
+      state.userClassrooms = action.payload
+    })
+    .addCase(getClassroomByUserIDStudent.rejected,(state,action)=>{
+      state.isLoading = false
+      state.isError = true
+      state.message = action.error.message
+    })
     .addCase(addClassroom.pending,(state,action)=>{
       state.isLoading = true
     })
@@ -73,8 +86,7 @@ const classSlice = createSlice({
       state.isError = true;
       state.message = error.message
       state.isLoading = false;
-      
-
+  
     });
   }
 });
@@ -133,7 +145,26 @@ export const getClassByID = createAsyncThunk("getClassroomByClassroomID",async(i
       console.log(err)
 }})
 
+export const getClassroomByUserIDStudent = createAsyncThunk("getClassroomByUserIDStudent",async (userID)=>{
+  try{
+
+    const classroomsRef = await getDocs(collection(db, "classrooms"));
+    const classrooms = classroomsRef.docs.map((doc) => ({
+      ...doc.data()
+    }));
+    const filteredClassrooms = classrooms.filter((classroom) =>
+      classroom.selectedStudent.some((student) => student.uid === userID)
+    );
+    return filteredClassrooms; 
+  }
+  catch(error){
+    console.error("Error fetching classrooms:", error);
+  }
+})
+
 
 export const { setUserClassrooms} = classSlice.actions;
 
 export default classSlice.reducer;
+
+
