@@ -36,9 +36,10 @@ const Header = () => {
                         <MdClass />
                         Sınavlarım
                     </Link>
-                    <Link to="/enter-exam" className={`flex  bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+            
+                    <Link to="/results" className={`flex  ${user.userRole === "student" ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
                         <MdClass />
-                        Sınav Çöz
+                        Sonuçlarım
                     </Link>
                 
 

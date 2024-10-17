@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-const RightSide = ({setExamQuestions,examQuestion}) => {
+const RightSide = ({setExamQuestions,examQuestion,questionIndex, setQuestionIndex}) => {
 
 
     const { user } = useSelector(state => state.user)
@@ -11,15 +11,17 @@ const RightSide = ({setExamQuestions,examQuestion}) => {
 
     const dispatch = useDispatch();
 
-    const addQuestions = (data) => {
-      // data'ya her soru için id verilmesi gerekiyor.
-      // id'yi random bir şekilde oluşturup data'ya ekleyebilirsin.
-      const questionID = Math.random().toString(36).substr(2, 9);
 
+    const addQuestions = (data) => {
+
+      const questionID = Math.random().toString(36).substr(2, 9);
+      setQuestionIndex(prev => prev + 1);
       const newData = {
         ...data,
         id: questionID,
+        index : questionIndex,
       }
+      console.log(newData);
         try {
           setExamQuestions(prev => [...prev,newData]);
           reset(); 
@@ -27,6 +29,7 @@ const RightSide = ({setExamQuestions,examQuestion}) => {
           console.log(error);
         }
       };
+
       
 
   return (

@@ -17,6 +17,7 @@ const ExamManagement = () => {
     const [examQuestions, setExamQuestions] = useState([]);
     const [examInfo, setExamInfo] = useState(null)
 
+    const [questionIndex, setQuestionIndex] = useState(0)
     
 
     useEffect(() => {
@@ -28,7 +29,7 @@ const ExamManagement = () => {
             <h1 className='font-semibold text-2xl'>Sınav Yönetimi</h1>
             <div className='w-full flex justify-start items-center gap-x-5'>
                 <LeftSide examInfo={examInfo} setExamInfo={setExamInfo} examQuestions={examQuestions} />
-                <RightSide examQuestions={examQuestions} setExamQuestions={setExamQuestions} />
+                <RightSide questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}  examQuestions={examQuestions} setExamQuestions={setExamQuestions} />
             </div>
         </div>
     )

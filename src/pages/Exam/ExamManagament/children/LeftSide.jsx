@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { getClassromByUserID } from '~/redux/slices/classSlice';
 import { addToExam,  } from '~/redux/slices/examSlice';
+import { toast } from 'react-toastify';
 
 const LeftSide = ({ examQuestions }) => {
 
@@ -11,13 +12,14 @@ const LeftSide = ({ examQuestions }) => {
     const { user } = useSelector(state => state.user)
     const { register, handleSubmit, reset } = useForm()
     const [examTime, setExamTime] = useState(60);
+  
 
     const addExam = (data) => {
         try {
             const { id: classroomID, className } = JSON.parse(data.classroomInfo);
             const examFullData = {
                 ...data,
-                examTime: examTime,
+                examTime: Number(examTime),
                 questions: examQuestions,
                 addedUser: user.uid,
                 classroomID, 
@@ -25,6 +27,8 @@ const LeftSide = ({ examQuestions }) => {
             }
             delete examFullData.classroomInfo; 
             dispatch(addToExam(examFullData));
+            reset();
+            toast.success('Sınav başarıyla oluşturuldu');
         } catch (error) {
             console.log(error.message);
         }

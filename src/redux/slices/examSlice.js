@@ -28,6 +28,7 @@ export const examSlice = createSlice({
     setCurrentExam: (state, action) => {
       state.currentExam = action.payload;
     },
+
   },
   extraReducers: (builder) => {
     builder

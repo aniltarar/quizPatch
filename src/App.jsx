@@ -7,7 +7,6 @@ import Profile from './pages/Profile/Profile'
 import { ToastContainer } from 'react-toastify'
 import {  useSelector } from 'react-redux'
 import FlexContainer from './containers/FlexContainer'
-import 'react-toastify/dist/ReactToastify.css';
 import TeacherClassroom from './pages/Classrooms/Teacher/TeacherClassroom'
 import StudentClassroom from './pages/Classrooms/Student/StudentClassroom'
 import ClassroomDetail from './pages/Classrooms/Detail/ClassroomDetail'
@@ -16,7 +15,8 @@ import MyExams from './pages/Exam/MyExams/MyExams'
 import ExamDetail from './pages/Exam/Detail/ExamDetail'
 import EnterExam from './pages/Exam/EnterExam/EnterExam'
 import StudentClassroomDetail from './pages/Classrooms/Student/StudentClassroomDetail'
-
+import Results from './pages/Results/Results'
+import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
 
   const { user } = useSelector((store) => store.user);
@@ -82,7 +82,10 @@ const App = () => {
           path: "/my-classrooms",
           element : user?.userRole === "student" ? <StudentClassroom/> : <Navigate to="/login"/>
         },
-        
+        {
+          path: "/results",
+          element : user?.userRole === "student" ? <Results/> : <Navigate to="/login"/>
+        },
         {
           path: "/exam-management",
           element : user?.userRole === "teacher" ? <ExamManagement/> : <Navigate to="/login"/>
