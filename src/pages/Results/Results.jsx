@@ -1,5 +1,6 @@
 import React , {useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { getCorrectAnswersByExamID, getExamPaperByUserID } from '~/redux/slices/resultSlice'
 
 const Results = () => {
@@ -17,7 +18,6 @@ const Results = () => {
 
   },[])
 
-  console.log(examPaper);
 
 
   return (
@@ -38,17 +38,9 @@ const Results = () => {
                 <th scope="col" className="px-6 py-3">
                     Soru Sayısı
                 </th>
+
                 <th scope="col" className="px-6 py-3">
-                    Doğru
-                </th>
-                <th scope="col" className="px-6 py-3">
-                    Yanlış
-                </th>
-                <th scope="col" className="px-6 py-3">
-                    Boş
-                </th>
-                <th scope="col" className="px-6 py-3">
-                    Not
+                    Puan
                 </th>
                 <th scope="col" className="px-6 py-3">
                     İncele
@@ -57,6 +49,7 @@ const Results = () => {
         </thead>
         <tbody>
              {examPaper.map((item,i) => (
+              
               <tr  key={i} className="bg-white border-b ">
               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                   {item.examName}
@@ -65,11 +58,12 @@ const Results = () => {
                   {item.myAnswers.length}
               </td>
               <td className="px-6 py-4">
-                  Laptop
+                  100
               </td>
               <td className="px-6 py-4">
-                  $2999
+                  <Link className='px-2 py-3 rounded-md bg-blue-300' to={`/results/${item.id}`} >Detay</Link>
               </td>
+           
           </tr>
              ))}
 

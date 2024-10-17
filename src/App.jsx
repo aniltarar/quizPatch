@@ -16,6 +16,7 @@ import ExamDetail from './pages/Exam/Detail/ExamDetail'
 import EnterExam from './pages/Exam/EnterExam/EnterExam'
 import StudentClassroomDetail from './pages/Classrooms/Student/StudentClassroomDetail'
 import Results from './pages/Results/Results'
+import ResultsDetail from './pages/Results/ResultsDetail'
 import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
 
@@ -85,6 +86,10 @@ const App = () => {
         {
           path: "/results",
           element : user?.userRole === "student" ? <Results/> : <Navigate to="/login"/>
+        },
+        {
+          path: "/results/:id",
+          element : user?.userRole === "student" ? <ResultsDetail/> : <Navigate to="/login"/>
         },
         {
           path: "/exam-management",

@@ -36,11 +36,13 @@ export const getCorrectAnswersByExamID = createAsyncThunk(
 
     const exam = examSnapshot.docs.map((doc) => ({
       id: doc.id,
-      questions: doc.data().questions.map((question) => question.correctAnswer),
+      questionsAnswers: doc.data().questions.map((question) => question.correctAnswer),
     }));
     return exam;
   }
 );
+
+
 
 export const resultSlice = createSlice({
   name: "result",
@@ -70,7 +72,7 @@ export const resultSlice = createSlice({
       .addCase(getCorrectAnswersByExamID.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.correctAnswers = [...state.correctAnswers, action.payload];
+        state.correctAnswers = action.payload
       })
       .addCase(getCorrectAnswersByExamID.rejected, (state) => {
         state.isLoading = false;
