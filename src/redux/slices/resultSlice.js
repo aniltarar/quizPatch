@@ -10,37 +10,6 @@ const initialState = {
   correctAnswers: [],
 };
 
-export const getExamPaperByUserID = createAsyncThunk(
-  "result/getExamPaperByUserID",
-  async (userID) => {
-    const examPaperRef = collection(db, "examPapers");
-
-    const examPaperSnapshot = await getDocs(examPaperRef);
-
-    const examPaper = examPaperSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    const currentUserPapers = examPaper.filter(
-      (exampaper) => exampaper.userID === userID
-    );
-    return currentUserPapers;
-  }
-);
-
-export const getCorrectAnswersByExamID = createAsyncThunk(
-  "result/getCorrectAnswersByExamID",
-  async (examID) => {
-    const examRef = collection(db, "exams");
-    const examSnapshot = await getDocs(examRef);
-
-    const exam = examSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      questionsAnswers: doc.data().questions.map((question) => question.correctAnswer),
-    }));
-    return exam;
-  }
-);
 
 
 
@@ -80,6 +49,39 @@ export const resultSlice = createSlice({
       });
   },
 });
+
+export const getExamPaperByUserID = createAsyncThunk(
+  "result/getExamPaperByUserID",
+  async (userID) => {
+    const examPaperRef = collection(db, "examPapers");
+
+    const examPaperSnapshot = await getDocs(examPaperRef);
+
+    const examPaper = examPaperSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    const currentUserPapers = examPaper.filter(
+      (exampaper) => exampaper.userID === userID
+    );
+    return currentUserPapers;
+  }
+);
+
+export const getCorrectAnswersByExamID = createAsyncThunk(
+  "result/getCorrectAnswersByExamID",
+  async (examID) => {
+    const examRef = collection(db, "exams");
+    const examSnapshot = await getDocs(examRef);
+
+    const exam = examSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      questionsAnswers: doc.data().questions.map((question) => question.correctAnswer),
+    }));
+    return exam;
+  }
+);
+
 
 export const { setResults } = resultSlice.actions;
 export default resultSlice.reducer;

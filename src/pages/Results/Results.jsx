@@ -13,7 +13,7 @@ const Results = () => {
 
 
   useEffect(() => {
-    dispatch(getExamPaperByUserID(user.uid))
+    dispatch(getExamPaperByUserID(user.uid)) 
     dispatch(getCorrectAnswersByExamID(examPaper.examID))
 
   },[])
@@ -58,7 +58,7 @@ const Results = () => {
                   {item.myAnswers.length}
               </td>
               <td className="px-6 py-4">
-                  100
+                  Sınav Notu Gelecek
               </td>
               <td className="px-6 py-4">
                   <Link className='px-2 py-3 rounded-md bg-blue-300' to={`/results/${item.id}`} >Detay</Link>

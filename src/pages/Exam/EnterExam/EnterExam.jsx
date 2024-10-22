@@ -8,8 +8,6 @@ import { toast } from 'react-toastify';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '~/firebase/firebaseConfig';
 
-
-
 const EnterExam = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -26,10 +24,7 @@ const EnterExam = () => {
   const [time, setTime] = useState(examTime);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-
   const [answers, setAnswers] = useState([]);
-
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,9 +40,6 @@ const EnterExam = () => {
 
     return () => clearInterval(interval);
   }, [examTime]);
-
-
-
 
   const handleNextQuestion = () => {
     if (currentIndex < questions.length - 1) {
@@ -65,11 +57,9 @@ const EnterExam = () => {
     }
   };
 
-
   const handleSelectAnswer = (answer) => {
     setSelectedAnswer(answer);
     setAnswers([...answers, { questionID: questions[currentIndex].id, answer }]);
-
   };
 
   const onSubmit = async(data) => {
@@ -109,32 +99,32 @@ const EnterExam = () => {
             <div className='w-full grid grid-cols-2 gap-5'>
               <button
                 type="button"
-                onClick={() => handleSelectAnswer("optionA")}
-                className={`${selectedAnswer === "optionA" ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
+                onClick={() => handleSelectAnswer(questions[currentIndex].optionA)}
+                className={`${selectedAnswer === questions[currentIndex].optionA ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
               >
                 {"A) "}{questions[currentIndex].optionA}
               </button>
 
               <button
                 type="button"
-                onClick={() => handleSelectAnswer("optionB")}
-                className={`${selectedAnswer === "optionB" ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
+                onClick={() => handleSelectAnswer(questions[currentIndex].optionB)}
+                className={`${selectedAnswer === questions[currentIndex].optionB ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
               >
                 {"B) "}{questions[currentIndex].optionB}
               </button>
 
               <button
                 type="button"
-                onClick={() => handleSelectAnswer("optionC")}
-                className={`${selectedAnswer === "optionC" ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
+                onClick={() => handleSelectAnswer(questions[currentIndex].optionC)}
+                className={`${selectedAnswer === questions[currentIndex].optionC ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
               >
                 {"C) "}{questions[currentIndex].optionC}
               </button>
 
               <button
                 type="button"
-                onClick={() => handleSelectAnswer("optionD")}
-                className={`${selectedAnswer === "optionD" ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
+                onClick={() => handleSelectAnswer(questions[currentIndex].optionD)}
+                className={`${selectedAnswer === questions[currentIndex].optionD ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
               >
                 {"D) "}{questions[currentIndex].optionD}
               </button>
