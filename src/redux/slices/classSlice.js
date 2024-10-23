@@ -124,7 +124,8 @@ export const getClassromByUserID = createAsyncThunk("getClassromByUserID",async 
           ...doc.data()
         }));
         const filteredClassrooms = classrooms.filter((classroom) =>
-          classroom.selectedTeacher.some((teacher) => teacher.uid === userID)
+          classroom.selectedTeacher.some((teacher) => teacher.uid === userID),
+          // classroom.selectedStudent.some((student) => student.uid === userID)
         );
         return filteredClassrooms; 
   }

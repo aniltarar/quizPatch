@@ -13,8 +13,8 @@ const Home = () => {
 
 
   useEffect(() => {
-    dispatch(getClassromByUserID(user.uid)); 
-  }, [dispatch, user.uid]);
+    dispatch(getClassromByUserID(user?.uid)); 
+  }, [dispatch, user?.uid]);
 
   return (
     <div>

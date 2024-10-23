@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 import { tabs } from '~/data/data';
 import { FiUser } from 'react-icons/fi';
 import { logout } from '~/redux/slices/userSlice';
@@ -7,11 +7,24 @@ import { useDispatch } from 'react-redux';
 import { IoExitOutline } from "react-icons/io5";
 import { MdClass } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
+import { auth } from '~/firebase/firebaseConfig';
+import { signOut } from 'firebase/auth';
 
 const Header = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
 
+
+    const exit = async() => {
+       try{
+           await signOut(auth);
+           window.location.reload();
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
+    }
     
 
     return (
@@ -52,7 +65,7 @@ const Header = () => {
                         <BiPencil />
                         Sınav Yönetimi
                     </Link>
-                    <button onClick={() => dispatch(logout())} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline />Çıkış Yap</button>
+                    <button onClick={exit} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline />Çıkış Yap</button>
                 </div> : tabs.map((item) => (
                     <Link key={item.id} to={item.to} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'>
                         <span><item.icon /></span>
