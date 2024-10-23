@@ -41,10 +41,10 @@ const LeftSide = ({ examQuestions }) => {
     const isValid = examQuestions.length >= 1;
 
     return (
-        <form className="flex flex-col p-3 gap-y-5 bg-white rounded-md w-1/2" onSubmit={handleSubmit(addExam)}>
+        <form className="flex flex-col p-3 gap-y-5 bg-white rounded-md w-1/2 border" onSubmit={handleSubmit(addExam)}>
             <div className="flex flex-col gap-y-1">
                 <label className='font-semibold text-sm'>Sınıf Seçin</label>
-                <select {...register("classroomInfo")}>
+                <select {...register("classroomInfo")} className='border px-4 py-2 rounded-md'>
                     <option value="">Seçiniz...</option>
                     {userClassrooms.map((classroom) => (
                         <option
@@ -87,10 +87,10 @@ const LeftSide = ({ examQuestions }) => {
             </div>
             <button
                 type='submit'
-                className={`px-4 py-2 rounded-md text-white transition-colors ${isValid ? 'bg-blue-500' : "bg-gray-500 "}`}
+                className={`px-4 py-2 rounded-md text-white transition-colors ${isValid ? 'bg-blue-500' : "bg-neutral-300 text-zinc-400 "}`}
                 disabled={!isValid}
             >
-                Sınavı Oluştur
+                {!isValid?"En az 4 soru eklenmesi gerekmektedir":"Sınavı Oluştur"} 
             </button>
         </form>
     )

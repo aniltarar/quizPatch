@@ -5,6 +5,7 @@ import { getExamPaperByUserID } from '~/redux/slices/resultSlice';
 import { getExamByExamID } from '~/redux/slices/examSlice';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '~/firebase/firebaseConfig';
+import { toast } from 'react-toastify';
 
 const ResultsDetail = () => {
 
@@ -39,7 +40,6 @@ const ResultsDetail = () => {
                 ...filteredExamPaper,
                 examPoint: examPoint
             })
-            console.log("Exam Point added successfully");
         }
         catch(err){
             console.log(err);   
@@ -90,14 +90,19 @@ const ResultsDetail = () => {
                             <td className="py-2 px-4 border-b text-left">{index + 1}</td>
                             <td className="py-2 px-4 border-b">{question?.examQuestionName}</td>
                             <td className="py-2 px-4 border-b">{`${questionsAnswers[index]}`}</td>
-                            <td className="py-2 px-4 border-b">{userAnswers[index]}</td>
+                            <td className="py-2 px-4 border-b">{userAnswers[index] === questionsAnswers[index] ? userAnswers[index] : "Boş bırakıldı." }</td>
                             <td className="py-2 px-4 border-b text-left">
                                 {questionsAnswers[index] === userAnswers[index] ? <span className='text-green-500 font-medium'>Doğru</span> : <span className='text-red-500 font-medium'>Yanlış</span>}
                             </td>
                         </tr>
+                        
                     ))}
                 </tbody>
+               
             </table>
+            <div className='w-full px-4 py-2 rounded-md bg-white border mt-3'>
+                    Sınav Notunuz : {examPoint}
+            </div>
         </div>
     );
 };

@@ -17,11 +17,11 @@ const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(registerScheme)
   });
-  
+
 
   const registerHandle = async (data) => {
     const isValid = data.password === data.passwordConfirmation;
- 
+
     try {
       if (isValid) {
 
@@ -31,14 +31,14 @@ const Register = () => {
         await updateProfile(user, {
           displayName: data.displayName
         });
-        
+
         dispatch(setUser({
           uid: user.uid,
           displayName: user.displayName,
           email: user.email,
           phoneNumber: data.phoneNumber,
           userRole: data.role,
-          classrooms: []
+       
         }));
 
 
@@ -47,27 +47,27 @@ const Register = () => {
         const usersRef = doc(collection(db, "users"), user.uid);
 
         // Eğitmen tablosuna kayıt
-        if(data.role === "teacher"){
+        if (data.role === "teacher") {
           await setDoc(teacherRef, {
             uid: user.uid,
             displayName: user.displayName,
             email: user.email,
             phoneNumber: data.phoneNumber,
             userRole: data.role,
-            classrooms: []
+            isVerified:false
           });
         }
 
-     
+
         // Öğrenci tablosuna kayıt
-        if(data.role === "student"){
+        if (data.role === "student") {
           await setDoc(studentRef, {
             uid: user.uid,
             displayName: user.displayName,
             email: user.email,
             phoneNumber: data.phoneNumber,
             userRole: data.role,
-            classrooms: []
+
           });
         }
 
@@ -78,7 +78,7 @@ const Register = () => {
           email: user.email,
           phoneNumber: data.phoneNumber,
           userRole: data.role,
-          classrooms: []
+          isVerified:false
         })
       } else {
         toast.error("Parolalar uyuşmuyor!");

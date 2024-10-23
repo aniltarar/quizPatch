@@ -32,7 +32,7 @@ const TeacherCard = ({ teacher, setClassMembers,resetSelected }) => {
                     <p className='text-xs'>{teacher?.userRole === "teacher" ? "Öğretmen" : null}</p>
                 </div>
             </div>
-            <button disabled={isSelected} type='button' onClick={handleSelect} className={`bg-black hover:bg-black/90 ${isSelected ? "bg-orange-600 hover:bg-orange-500" : "bg-black"} text-white w-full flex justify-center items-center py-1 rounded-md gap-x-2 transition-colors`}>
+            <button disabled={isSelected} type='button' onClick={handleSelect} className={`bg-black mt-auto hover:bg-black/90 ${isSelected ? "bg-orange-600 hover:bg-orange-500" : "bg-black"} text-white w-full flex justify-center items-center py-1 rounded-md gap-x-2 transition-colors`}>
                 <IoMdAdd size={17} /> <span>{isSelected ? <span>Eklendi</span> : <span>Ekle</span>}</span>
             </button>
         </div>

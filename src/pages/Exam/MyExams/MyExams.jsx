@@ -19,12 +19,12 @@ useEffect(() => {
 
 
   return (
-    <div>
+    <div className='py-5 px-12 flex flex-col gap-y-3'>
         <h1 className='text-2xl font-semibold'>Sınavlarım</h1>
-        <div className='w-full grid grid-flow-row grid-cols-2 gap-3'>
+        <div className='w-full grid grid-flow-row grid-cols-1 gap-3 place-items-start'>
             {exams.length > 0 ? exams.map((exam) => (
                 <ExamBox exam={exam} key={exam.examID} />
-            )) : <p className='text-center'>Henüz sınavınız bulunmamaktadır.</p>}
+            )) : <p className='text-center bg-red-100 text-red-500 px-4 py-2 rounded-md'>Henüz sınavınız bulunmamaktadır, lütfen yeni bir sınav oluşturun.</p>}
     </div>
     </div>
   )

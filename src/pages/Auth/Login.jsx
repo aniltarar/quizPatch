@@ -20,40 +20,41 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogin = async (data) => {
+    
+    
+    
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
       const user = userCredential.user
 
-
-
-      const userDoc = await getDoc(doc(db, "users", user.uid))
+      const teacherDoc = await getDoc(doc(db, "teachers", user.uid))
 
       const studentDoc = await getDoc(doc(db,"students",user.uid))
     
       const studentData = ({
-        uid: userDoc.data()?.uid,
-        email: userDoc.data()?.email,
-        displayName: userDoc.data()?.displayName,
-        phoneNumber: userDoc.data()?.phoneNumber,
-        userRole: userDoc.data()?.userRole,
-        classrooms: studentDoc.data()?.classrooms
+        uid: studentDoc.data()?.uid,
+        email: studentDoc.data()?.email,
+        displayName: studentDoc.data()?.displayName,
+        phoneNumber: studentDoc.data()?.phoneNumber,
+        userRole: studentDoc.data()?.userRole,
+        
       })
 
-
-      const userData = ({
-        uid: userDoc.data()?.uid,
-        email: userDoc.data()?.email,
-        displayName: userDoc.data()?.displayName,
-        phoneNumber: userDoc.data()?.phoneNumber,
-        userRole: userDoc.data()?.userRole,
-        classrooms: userDoc.data()?.classrooms
+      const teacherData = ({
+        uid: teacherDoc.data()?.uid,
+        email: teacherDoc.data()?.email,
+        displayName: teacherDoc.data()?.displayName,
+        phoneNumber: teacherDoc.data()?.phoneNumber,
+        userRole: teacherDoc.data()?.userRole,
+        isVerified: teacherDoc.data()?.isVerified
+       
       })
 
-
-      if(userDoc.data().userRole === "student"){
+      if(studentDoc.data()?.userRole === "student"){
         dispatch(setUser(studentData))
-      }else{
-        dispatch(setUser(userData))
+      }
+      if (teacherDoc.data()?.userRole === "teacher") { 
+        dispatch(setUser(teacherData))
       }
 
       toast.success("Giriş Yapıldı")

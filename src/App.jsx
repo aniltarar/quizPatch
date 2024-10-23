@@ -73,7 +73,7 @@ const App = () => {
         },
         {
           path: "/classrooms-management",
-          element : user?.userRole === "teacher" ? <TeacherClassroom/> : <Navigate to="/login"/>
+          element : user?.userRole === "teacher"  && user?.isVerified === true ? <TeacherClassroom/> : <Navigate to="/login"/>
         },
         {
           path: "/enter-exam/:id",
@@ -93,7 +93,7 @@ const App = () => {
         },
         {
           path: "/exam-management",
-          element : user?.userRole === "teacher" ? <ExamManagement/> : <Navigate to="/login"/>
+          element : user?.userRole === "teacher"  && user?.isVerified === true ? <ExamManagement/> : <Navigate to="/login"/>
         }
       ]
     }

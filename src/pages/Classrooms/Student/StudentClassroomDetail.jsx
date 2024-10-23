@@ -15,7 +15,6 @@ const StudentClassroomDetail = () => {
         dispatch(getExamsByClassroomID(id))
     }, [])
 
-    console.log(exams);
     
 
   return (
@@ -43,7 +42,7 @@ const StudentClassroomDetail = () => {
         <h1 className='text-4xl font-semibold'>Sınavlar</h1>
             {
                 exams.length > 0 ? exams.map((exam) => (
-                   <div className='flex justify-between  items-center p-3 rounded-md border bg-white'>
+                   <div key={exam.examID} className='flex justify-between  items-center p-3 rounded-md border bg-white'>
                        <div key={exam.examID}>{exam.examName}</div>
                        <Link to={`/enter-exam/${exam.examID}`} className='px-4 py-1 rounded-md bg-zinc-100'>Sınava Gir</Link>
                    </div> 

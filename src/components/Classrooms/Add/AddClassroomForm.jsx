@@ -74,7 +74,7 @@ const AddClassroomForm = () => {
         <label >Oluşturacağınız Sınıfın Açıklaması Adını Giriniz</label>
         <input type="text" className='w-full outline-none px-2 py-1 rounded-md border' {...register("classDesc")} placeholder='Örn: Yaşadığımız dünya hakkında derin bilgiler öğreneceğiz.' />
       </div>
-      <div className='w-full grid md:grid-cols-3 grid-cols-1 gap-4 '>
+      <div className='w-full grid md:grid-cols-3 grid-cols-1 gap-4  overflow-y-auto max-h-64 '>
         {
           teachers.map((teacher) => (
             <TeacherCard key={teacher.uid} teacher={teacher} setClassMembers={setClassMembers} resetSelected={resetSelected} />
@@ -83,7 +83,7 @@ const AddClassroomForm = () => {
 
       </div>
       <hr />
-      <div className='w-full grid md:grid-cols-3 grid-cols-1 gap-4 '>
+      <div className='w-full grid md:grid-cols-3 grid-cols-1 gap-4 overflow-y-auto max-h-64'>
         {students.map((student) => (
           <StudentCard key={student.uid} student={student} setClassMembers={setClassMembers} resetSelected={resetSelected} />
         ))}

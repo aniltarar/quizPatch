@@ -22,16 +22,19 @@ const ClassroomDetail = () => {
 
   const { register, handleSubmit, reset } = useForm()
   const classroomRef = doc(db, 'classrooms', id);
-  
+
   // Silme işlemleri
 
   const deletedTeacher = async (teacherId) => {
     const filteredTeacher = selectedTeacher.filter((teacher) => teacher.uid !== teacherId);
     try {
-      await updateDoc(classroomRef, {
-        selectedTeacher: filteredTeacher,
-      });
+      if (confirm("Öğretmeni sınıftan çıkarmak istediğinize emin misiniz?")) {
 
+        await updateDoc(classroomRef, {
+          selectedTeacher: filteredTeacher,
+        });
+
+      }
       dispatch(getClassByID(id));
     } catch (error) {
       console.log('Hata!!!', error);
@@ -42,9 +45,11 @@ const ClassroomDetail = () => {
   const deletedStudent = async (studentId) => {
     const filteredStudent = selectedStudent.filter((student) => student.uid !== studentId);
     try {
-      await updateDoc(classroomRef, {
-        selectedStudent: filteredStudent,
-      });
+      if (confirm("Öğrenciyi sınıftan çıkarmak istediğinize emin misiniz?")) {
+        await updateDoc(classroomRef, {
+          selectedStudent: filteredStudent,
+        });
+      }
 
       dispatch(getClassByID(id));
     } catch (error) {
@@ -53,7 +58,7 @@ const ClassroomDetail = () => {
   };
 
   const deleteClass = () => {
-    if (window.confirm("Sınıfı silmek istediğinize emin misiniz?")) {
+    if (confirm("Sınıfı silmek istediğinize emin misiniz?")) {
       dispatch(deleteClassroomByID(id))
       navigate("/classrooms-management")
     } else {
@@ -84,7 +89,7 @@ const ClassroomDetail = () => {
       className: className,
       classDesc: classDesc,
     });
-  },[reset, className, classDesc]);
+  }, [reset, className, classDesc]);
 
 
 
@@ -107,27 +112,26 @@ const ClassroomDetail = () => {
       <div className='w-full flex flex-col justify-start items-start  p-5 gap-y-5'>
         <div className='w-full flex justify-between items-center '>
           <h1 className='font-semibold text-3xl'>{className + " "}Sınıf Detayı</h1>
-
         </div>
         <div className='w-full  h-[500px] flex justify-start items-center gap-x-5 '>
           <div className=' w-1/2 h-full'>
 
-            <form className='w-full h-1/2 border p-3' onSubmit={handleSubmit(saveClass)}>
+            <form className='w-full h-full border p-6 bg-white rounded-md flex flex-col gap-y-5' onSubmit={handleSubmit(saveClass)}>
               <div className='flex flex-col gap-y-1'>
-                <label className='font-semibold text-lg border outline-none'>Sınıfın Adı*</label>
-                <input {...register("className")} type="text" className='px-4 py-2 rounded-md' defaultValue={className} disabled={!isEditMode} />
+                <label className='font-semibold text-sm  outline-none'>Sınıfın Adı*</label>
+                <input {...register("className")} type="text" className='px-4 py-2 rounded-md border ' defaultValue={className} disabled={!isEditMode} />
               </div>
               <div className='flex flex-col gap-y-1'>
-                <label className='font-semibold text-lg border outline-none'>Sınıfın Açıklaması*</label>
-                <input {...register("classDesc")} type="text" className='px-4 py-2 rounded-md' defaultValue={classDesc} disabled={!isEditMode} />
+                <label className='font-semibold text-sm  outline-none'>Sınıfın Açıklaması*</label>
+                <input {...register("classDesc")} type="text" className='px-4 py-2 rounded-md border ' defaultValue={classDesc} disabled={!isEditMode} />
               </div>
-              <div className="controlClass flex gap-x-3 mt-5">
+              <div className="controlClass flex mt-auto gap-x-3">
                 {isEditMode ? (
-                  <button type='submit' className='bg-blue-100 px-4 py-1.5 text-blue-500 rounded-md'>
-                    Güncelle
+                  <button type='submit' className='bg-green-500 px-4 py-1.5 text-white rounded-md'>
+                    Kaydet
                   </button>
                 ) : (
-                  <span type='button' onClick={() => setIsEditMode(true)} className='cursor-pointer bg-blue-100 px-4 py-1.5 text-blue-500 rounded-md'>
+                  <span type='button' onClick={() => setIsEditMode(true)} className='cursor-pointer bg-yellow-500 text-white px-4 py-1.5  rounded-md'>
                     Düzenle
                   </span>
                 )}
@@ -139,11 +143,11 @@ const ClassroomDetail = () => {
           </div>
           {/* Right Side */}
           <div className=' w-1/2 h-full flex justify-start items-start gap-x-5 '>
-            <div className=' border-2 rounded-md w-full h-full flex flex-col justify-start items-center gap-y-5 p-3'>
-              <span className='w-full bg-blue-500 rounded-md text-white flex justify-center items-center py-2 font-semibold'>Sınıfta Bulunan Öğretmenler</span>
+            <div className='bg-white border-2 rounded-md w-full h-full flex flex-col justify-start items-center gap-y-5 p-3'>
+              <span className='w-full bg-black rounded-md text-white flex justify-center items-center py-2 font-semibold'>Sınıfta Bulunan Öğretmenler</span>
               <div className='flex flex-col gap-y-2 w-full'>
                 {selectedTeacher?.map((teacher) => (
-                  <div className='w-full bg-white py-2 px-3 rounded-md border flex justify-between items-center' key={teacher.uid}>
+                  <div className='w-full bg-zinc-50 py-2 px-3 rounded-md border flex justify-between items-center' key={teacher.uid}>
                     <span>{teacher.displayName} </span>
                     <button onClick={() => deletedTeacher(teacher.uid)} className='p-2 bg-red-500 text-white rounded-md'>
                       <BiTrash />
@@ -152,11 +156,11 @@ const ClassroomDetail = () => {
                 ))}
               </div>
             </div>
-            <div className=' border-2 rounded-md w-full h-full flex flex-col justify-start items-center gap-y-5 p-3'>
-              <span className='w-full bg-blue-500 rounded-md text-white flex justify-center items-center py-2 font-semibold'>Sınıfta Bulunan Öğrenciler</span>
+            <div className='bg-white  border-2 rounded-md w-full h-full flex flex-col justify-start items-center gap-y-5 p-3'>
+              <span className='w-full  bg-black rounded-md text-white flex justify-center items-center py-2 font-semibold'>Sınıfta Bulunan Öğrenciler</span>
               <div className='flex flex-col gap-y-2 w-full'>
                 {selectedStudent?.map((student) => (
-                  <div className='w-full bg-white py-2 px-3 rounded-md border flex justify-between items-center' key={student.uid}>
+                  <div className='w-full bg-zinc-50 py-2 px-3 rounded-md border flex justify-between items-center' key={student.uid}>
                     <span>{student.displayName} </span>
                     <button onClick={() => deletedStudent(student.uid)} className='p-2 bg-red-500 text-white rounded-md'>
                       <BiTrash />
