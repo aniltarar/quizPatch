@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { getExamByExamID } from '~/redux/slices/examSlice';
 import { setResults } from '~/redux/slices/resultSlice';
 import { toast } from 'react-toastify';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { arrayUnion, collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '~/firebase/firebaseConfig';
 
 const EnterExam = () => {
@@ -14,32 +14,43 @@ const EnterExam = () => {
   const { currentExam } = useSelector(state => state.exam);
   const { user } = useSelector(state => state.user);
   const { results } = useSelector(state => state.result);
+  
   const { register, handleSubmit, setValue, getValues } = useForm();
-
+  const { questions = [], className, examName, examTime, enteredStudents } = currentExam;
+  
+  
+  
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const navigate = useNavigate();
+  const [remainingTime, setRemainingTime] = useState(examTime);  
+  
   useEffect(() => {
     dispatch(getExamByExamID(id));
   }, [dispatch, id]);
 
-  const { questions = [], className, examName, examTime } = currentExam;
-  const [time, setTime] = useState(examTime);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [answers, setAnswers] = useState([]);
+
+ useEffect(() => {
+    setRemainingTime(currentExam.examTime);  
+  }, [currentExam]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime((prev) => {
-        if (prev > 0) {
-          return prev - 1;
-        } else {
-          clearInterval(interval);
-          return 0;
-        }
-      });
-    }, 1000);
+    if (remainingTime > 0) {
+      const interval = setInterval(() => {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }, 1000); 
 
-    return () => clearInterval(interval);
-  }, [examTime]);
+      return () => clearInterval(interval); 
+    } else if (remainingTime === 0) {
+      toast.warning("Süre doldu, sınav gönderiliyor...");
+      onSubmit()
+      navigate("/results")
+    }
+  }, [remainingTime]);
+
+
 
   const handleNextQuestion = () => {
     if (currentIndex < questions.length - 1) {
@@ -62,7 +73,7 @@ const EnterExam = () => {
     setAnswers([...answers, { questionID: questions[currentIndex].id, answer }]);
   };
 
-  const onSubmit = async(data) => {
+  const onSubmit = async() => {
     const myResult = ({
       examID: id,
       userID: user.uid,
@@ -71,28 +82,52 @@ const EnterExam = () => {
     })
    try {
      const examPaperRef = doc(collection(db,"examPapers"));
-
-     const paperData = {
-      id : examPaperRef.id,
+     const examRef = doc(db, "exams", id)
+     
+    
+     await setDoc(examPaperRef, {
+      id: examPaperRef.id,
       ...myResult
-     }
+     });
 
-     await setDoc(examPaperRef, paperData);
+     await setDoc(examRef, {
+       ...currentExam,
+       enteredStudents : arrayUnion(user.uid)
+     })
+
      toast.success("Sınavınız başarıyla gönderildi.");
+      navigate("/results")
    } catch (error) {
       toast.error(error.message)
    }
 
   };
 
+  const isEntered = enteredStudents?.includes(user.uid);
+
+
+  if (isEntered) {
+
+    setTimeout(() => {
+      navigate("/results")
+    }, 3000);
+
+
+    return (
+      <div className='px-4 py-2 w-full bg-red-100 text-red-500 '>Daha önce bu sınav çözülmüş, Sonuçlarınıza yönlendiriliyorsunuz.</div>
+    )
+  }
+
+
+
   return (
     <div className="w-full flex-grow flex justify-start items-start p-5 flex-col gap-y-5">
       <div className="flex justify-between items-center w-full">
         <h1 className="font-semibold text-3xl">{examName}</h1>
-        {time ? <h1 className="font-semibold text-3xl">{time}</h1> : <h1 className="font-semibold text-3xl">Yükleniyor</h1>}
+        {remainingTime ? <h1 className="font-semibold text-3xl">{remainingTime}</h1> : <h1 className="font-semibold text-3xl">Süre Doldu</h1>}
       </div>
 
-      {questions.length > 0 && (
+         {questions.length > 0 && (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-y-5">
           <div key={questions[currentIndex].id} className='w-full p-4 flex flex-col gap-y-5'>
             <h2 className="text-2xl font-semibold">{questions[currentIndex].index + 1}{") "} {questions[currentIndex].examQuestionName}</h2>

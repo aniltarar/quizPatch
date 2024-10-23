@@ -22,9 +22,9 @@ const Results = () => {
 
   return (
     <div className='w-full flex-grow p-6 flex flex-col'>
+       
       <div className='flex w-full justify-between gap-y-2'>
         <h1 className='text-4xl font-bold'>Sınav Sonuçlarım</h1>
-        <p className='text-zinc-500 text-sm '>Toplam Puan : 0</p>
       </div>
     
 
@@ -43,7 +43,7 @@ const Results = () => {
                     Puan
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    İncele
+                    Detaylar
                 </th>
             </tr>
         </thead>
@@ -58,10 +58,10 @@ const Results = () => {
                   {item.myAnswers.length}
               </td>
               <td className="px-6 py-4">
-                  Sınav Notu Gelecek
+                  {item.examPoint ? Math.floor(item.examPoint) :  "Sonuca ulaşmak için detayları ziyaret ediniz." }
               </td>
               <td className="px-6 py-4">
-                  <Link className='px-2 py-3 rounded-md bg-blue-300' to={`/results/${item.id}`} >Detay</Link>
+                  <Link className='px-4 py-2 text-white rounded-md bg-blue-500' to={`/results/${item.id}`} >Detaylar</Link>
               </td>
            
           </tr>
