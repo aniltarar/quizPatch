@@ -45,7 +45,7 @@ const Header = () => {
                         <MdClass />
                         Sınıflarım
                     </Link>
-                    <Link to="/my-exams" className={`${user.userRole === "teacher" && user?.isVerified === true ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+                    <Link to="/my-exams" className={`${user.userRole === "teacher"  ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
                         <MdClass />
                         Sınavlarım
                     </Link>
@@ -54,16 +54,22 @@ const Header = () => {
                         <MdClass />
                         Sonuçlarım
                     </Link>
+
+              
                 
 
-                    <Link to="/classrooms-management" className={`${user.userRole === "teacher" && user?.isVerified === true  ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+                    <Link to="/classrooms-management" className={`${user.userRole === "teacher" ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
                         <MdClass />
                         Sınıf Yönetimi
                     </Link>
                     
-                    <Link to="/exam-management" className={`${user.userRole === "teacher" && user?.isVerified === true ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+                    <Link to="/exam-management" className={`${user.userRole === "teacher"  ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
                         <BiPencil />
                         Sınav Yönetimi
+                        </Link>
+                                       <Link to="/admin" className={`flex  ${user.userRole === "admin" ? "flex" : "hidden"} bg-zinc-100 text-sm text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors  items-center gap-x-2`}>
+                        <MdClass />
+                        Admin
                     </Link>
                     <button onClick={exit} className='bg-zinc-100 text-gray-700 hover:bg-zinc-200 border rounded-md px-4 py-2 transition-colors flex items-center gap-x-2'> <IoExitOutline />Çıkış Yap</button>
                 </div> : tabs.map((item) => (
@@ -72,6 +78,7 @@ const Header = () => {
                         <span>{item.title}</span>
                     </Link>
                 ))}
+                
             </nav>
         </header>
     );

@@ -12,6 +12,7 @@ import { db } from "~/firebase/firebaseConfig";
 const initialState = {
   exams: [],
   currentExam: {},
+  allExams: [],
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -126,6 +127,22 @@ export const examSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
+      })
+        .addCase(getAllExams.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(getAllExams.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.allExams = action.payload;
+      })
+      .addCase(getAllExams.rejected, (state) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
       });
   },
 });
@@ -223,6 +240,26 @@ export const getExamByExamID = createAsyncThunk(
     }
   }
 );
+
+export const getAllExams = createAsyncThunk("exams/getAllExams", async () => {
+
+  try{
+    const examsRef = collection(db, "exams");
+    const examsSnapshot = await getDocs(examsRef);
+
+    const exams = examsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    
+    return exams
+  }
+  catch(error){
+    console.error("Error fetching exams:", error);
+  }
+
+});
+
 
 export const { setCurrentExam, setExams } = examSlice.actions;
 export default examSlice.reducer;

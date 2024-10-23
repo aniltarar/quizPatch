@@ -16,8 +16,8 @@ export const roleLoader = async (requiredRole) => {
                     const userData = userDoc.data()
                     if(requiredRole.includes(userData.userRole)){
                         resolve(null)
-                    }else{
-                        resolve(redirect("/login"))
+                    } else{
+                        resolve(redirect("/"))
                     }
                 } else {
                     resolve(redirect("/login"))

@@ -6,6 +6,7 @@ import { db } from "~/firebase/firebaseConfig";
 const initialState = {
   userClassrooms: [],
   currentClassroom:{},
+  allClassrooms: [],
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -87,6 +88,18 @@ const classSlice = createSlice({
       state.message = error.message
       state.isLoading = false;
   
+    }).addCase(getAllClasrooms.pending, (state) => {
+      state.isLoading = true;
+    }
+    ).addCase(getAllClasrooms.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.allClassrooms = action.payload;
+    }
+    ).addCase(getAllClasrooms.rejected, (state, action) => {
+      state.isError = true;
+      state.message = action.error.message || "Bir hata meydana geldi";
+      state.isLoading = false;
     });
   }
 });
@@ -162,6 +175,17 @@ export const getClassroomByUserIDStudent = createAsyncThunk("getClassroomByUserI
     console.error("Error fetching classrooms:", error);
   }
 })
+
+export const getAllClasrooms = createAsyncThunk("getAllClasrooms", async () => {
+  const classroomsRef = collection(db, "classrooms");
+  const snapshot = await getDocs(classroomsRef);
+  const classroomsData = snapshot.docs.map((classroom) => ({
+    id: classroom.id,
+    ...classroom.data(),
+  }));
+  
+  return classroomsData;
+});
 
 
 export const { setUserClassrooms} = classSlice.actions;

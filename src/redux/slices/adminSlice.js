@@ -1,7 +1,6 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "~/firebase/firebaseConfig";
-
-const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 const initialState = {
   isLoading: false,
@@ -59,11 +58,7 @@ export const setVerifiedTeacherByTeacherUID = createAsyncThunk(
   "admin/setVerifiedTeacher",
   async (teacherUID, { rejectWithValue }) => {
     try {
-      const teacherRef = doc(db, "teachers", teacherUID);
-      updateDoc(teacherRef, {
-        ...teacherRef,
-        isVerified: true,
-      });
+      
     } catch (error) {
       return rejectWithValue(error);
     }

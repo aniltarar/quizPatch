@@ -8,7 +8,7 @@ import { auth, db } from "~/firebase/firebaseConfig";
 import { useDispatch } from "react-redux";
 import { setUser } from "~/redux/slices/userSlice";
 import { collection, doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Register = () => {
@@ -154,6 +154,7 @@ const Register = () => {
 
             <button className='bg-gradient-to-r from-orange-500 to-purple-500 text-white py-2 rounded-md'>Kayıt Ol</button>
           </form>
+          <Link to="/login" className='text-sm text-gray-600'>Zaten bir hesabınız var mı? Giriş yapın</Link>
         </div>
       </div>
       <div className='flex flex-col justify-center items-start p-24 gap-y-2 w-full '>

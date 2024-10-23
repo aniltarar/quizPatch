@@ -9,7 +9,7 @@ import { auth, db } from '~/firebase/firebaseConfig';
 import { setUser } from '~/redux/slices/userSlice';
 import { doc, getDoc } from 'firebase/firestore';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const Login = () => {
 
 
@@ -28,6 +28,7 @@ const Login = () => {
       const user = userCredential.user
 
       const teacherDoc = await getDoc(doc(db, "teachers", user.uid))
+      const userDoc = await getDoc(doc(db, "users", user.uid))
 
       const studentDoc = await getDoc(doc(db,"students",user.uid))
     
@@ -37,7 +38,16 @@ const Login = () => {
         displayName: studentDoc.data()?.displayName,
         phoneNumber: studentDoc.data()?.phoneNumber,
         userRole: studentDoc.data()?.userRole,
-        
+    
+      })
+
+       const userData = ({
+        uid: userDoc.data()?.uid,
+        email: userDoc.data()?.email,
+        displayName: userDoc.data()?.displayName,
+        phoneNumber: userDoc.data()?.phoneNumber,
+        userRole: userDoc.data()?.userRole,
+    
       })
 
       const teacherData = ({
@@ -56,9 +66,16 @@ const Login = () => {
       if (teacherDoc.data()?.userRole === "teacher") { 
         dispatch(setUser(teacherData))
       }
+       if (teacherDoc.data()?.userRole === "admin") { 
+        dispatch(setUser(userData))
+      }
 
       toast.success("Giriş Yapıldı")
       navigate("/")
+      setTimeout(() => {
+        location.reload()
+      }, 2000);
+
     } catch (error) {
       toast.error("Bir hata oluştu." + error)
       console.log(error);
@@ -90,6 +107,7 @@ const Login = () => {
           </div>
           <button type='submit' className='bg-gradient-to-r from-orange-500 to-purple-500 text-white py-2 rounded-md'>Giriş Yap</button>
         </form>
+        <Link to='/register' className='text-center text-sm text-black-600'>Hesabınız yok mu? Hemen Kayıt Olun</Link>
       </div>
     </div>
   )

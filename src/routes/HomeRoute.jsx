@@ -1,3 +1,8 @@
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
+import { db } from "~/firebase/firebaseConfig";
 import Layout from "~/layouts/Layout";
 import { roleLoader } from "~/loaders/roleLoader";
 import ClassroomDetail from "~/pages/Classrooms/Detail/ClassroomDetail";
@@ -14,7 +19,31 @@ import Results from "~/pages/Results/Results";
 import ResultsDetail from "~/pages/Results/ResultsDetail";
 import NoVerified from "~/pages/Warnings/NoVerified";
 
-export const HomeRoutes = {
+export const HomeRoutes = () => {
+
+
+    const [teacher,setTeacher] = useState(null)
+    const {user} = useSelector((state) => state.user);
+
+    
+
+    const fetchTeacher = async () => { 
+        try{
+        const teacherRef = doc(db, "teachers", user.uid);
+            const teacherData = await getDoc(teacherRef);
+            setTeacher(teacherData.data())
+      }
+      catch(e){
+        console.log(e)
+      }
+    }
+
+    useEffect(()=>{
+      fetchTeacher()
+
+    },[])
+
+    return  {
     path: "/",
     element: <Layout />,
     children: [
@@ -30,13 +59,13 @@ export const HomeRoutes = {
         },
         {
           path:"/my-exams",
-            element: <MyExams />,
-          loader: () => roleLoader(["teacher","admin"]),
+            element: teacher?.isVerified === true ?  <MyExams /> : <Navigate to="/un-verified"/>,
+          loader: () => roleLoader(["teacher"]),
         },
         {
           path: "/classroom-detail/:id",
-            element: <ClassroomDetail />,
-            loader: () => roleLoader(["teacher","admin"]),
+            element: teacher?.isVerified === true ?  <ClassroomDetail /> : <Navigate to="/un-verified"/>,
+            loader: () => roleLoader(["teacher"]),
         },
         {
           path: "/student-classroom-detail/:id",
@@ -45,12 +74,12 @@ export const HomeRoutes = {
         },
         {
           path: "/exam-detail/:id",
-            element: <ExamDetail />,
-          loader: () => roleLoader(["teacher","admin"]),
+            element: teacher?.isVerified === true ?  <ExamDetail /> : <Navigate to="/un-verified"/>,
+          loader: () => roleLoader(["teacher"]),
         },
         {
           path: "/classrooms-management",
-            element: <TeacherClassroom />,
+            element: teacher?.isVerified === true ?  <TeacherClassroom /> : <Navigate to="/un-verified"/>,
           loader: () => roleLoader(["teacher"]),
         },
         {
@@ -75,15 +104,16 @@ export const HomeRoutes = {
 
         },
           {
-          path: "/no-verified",
+          path: "/un-verified",
         element: <NoVerified />,
          loader: () => roleLoader(["teacher"]),
 
         },
         {
           path: "/exam-management",
-            element: <ExamManagement />,
+            element: teacher?.isVerified === true ?  <ExamManagement /> : <Navigate to="/un-verified"/>,
           loader: () => roleLoader(["teacher"]),
         }
       ]
+}
 }

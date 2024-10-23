@@ -6,7 +6,7 @@ import { HomeRoutes } from './routes/HomeRoute';
 
 const App = () => {
   const router = createBrowserRouter([
-    HomeRoutes,
+    HomeRoutes(),
     AuthRoutes,
     AdminRoutes,
   ]);
