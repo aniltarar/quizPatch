@@ -6,6 +6,8 @@ import classReducer from "./slices/classSlice";
 import examReducer from "./slices/examSlice";
 import resultReducer from "./slices/resultSlice";
 import adminReducer from "./slices/adminSlice";
+import  feedbackReducer  from "./slices/feedbackSlice";
+
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +17,7 @@ export const store = configureStore({
     classrooms: classReducer,
     exam: examReducer,
     result: resultReducer,
+    feedback: feedbackReducer,
     admin: adminReducer,
   },
 });

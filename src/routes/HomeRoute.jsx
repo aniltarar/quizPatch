@@ -13,6 +13,7 @@ import ExamDetail from "~/pages/Exam/Detail/ExamDetail";
 import EnterExam from "~/pages/Exam/EnterExam/EnterExam";
 import ExamManagement from "~/pages/Exam/ExamManagament/ExamManagement";
 import MyExams from "~/pages/Exam/MyExams/MyExams";
+import Feedback from "~/pages/Feedback/Feedback";
 import Home from "~/pages/Home/Home";
 import Profile from "~/pages/Profile/Profile";
 import Results from "~/pages/Results/Results";
@@ -113,6 +114,11 @@ export const HomeRoutes = () => {
           path: "/exam-management",
             element: teacher?.isVerified === true ?  <ExamManagement /> : <Navigate to="/un-verified"/>,
           loader: () => roleLoader(["teacher"]),
+        },
+        {
+          path:"/feedback",
+          element: <Feedback/>,
+          loader: () => roleLoader(["teacher", "student"]),
         }
       ]
 }

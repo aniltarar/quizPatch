@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, setDoc,doc, getDocs,getDoc, query, where, deleteDoc } from "firebase/firestore";
-import { set } from "react-hook-form";
 import { db } from "~/firebase/firebaseConfig";
 
 const initialState = {
