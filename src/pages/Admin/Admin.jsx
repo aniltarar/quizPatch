@@ -4,6 +4,7 @@ import { getAllStudents } from '~/redux/slices/studentSlice';
 import { getAllTeachers } from '~/redux/slices/teacherSlice';
 import { getAllClasrooms } from '~/redux/slices/classSlice';
 import { getAllExams } from '~/redux/slices/examSlice';
+import { getAllFeedbacks } from '~/redux/slices/feedbackSlice';
 const Admin = () => {
 
 
@@ -14,15 +15,16 @@ const Admin = () => {
   const { teachers } = useSelector(state => state.teacher)
   const { students } = useSelector(state => state.student)
   const { allClassrooms } = useSelector(state => state.classrooms)
+  const { feedbacks } = useSelector(state => state.feedback)
 
   useEffect(() => {
     dispatch(getAllTeachers())
     dispatch(getAllStudents())
     dispatch(getAllClasrooms())
     dispatch(getAllExams())
+    dispatch(getAllFeedbacks())
   }, [])
   
-  console.log(allClassrooms);
 
   // Ana Panel'de gösterilecekler. Tüm Öğrenci Sayısı, Tüm Öğretmen Sayısı, Tüm Sınıf Sayısı
   return (
@@ -41,8 +43,8 @@ const Admin = () => {
           <p className='w-full flex justify-center items-center text-zinc-600 text-2xl font-semibold'>Sınıf Sayısı</p>
         </div>
           <div className='p-4 bg-white border rounded-md shadow-lg'>
-          <p className='text-[200px] text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-violet-500'>240</p>
-          <p className='w-full flex justify-center items-center text-zinc-600 text-2xl font-semibold'>Mesaj Sayısı</p>
+          <p className='text-[200px] text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-violet-500'>{feedbacks?.length}</p>
+          <p className='w-full flex justify-center items-center text-zinc-600 text-2xl font-semibold'>Geribildirim Sayısı</p>
         </div>
       </div>
     </div>

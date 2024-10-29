@@ -85,9 +85,13 @@ const Register = () => {
       }
       navigate("/")
       toast.success("Kayıt Başarılı, Firestore kontrol ediniz!");
+      setTimeout(() => {
+        location.reload()
+      }, 2000);
     } catch (error) {
       toast.error(error.message);
     }
+
   };
 
 

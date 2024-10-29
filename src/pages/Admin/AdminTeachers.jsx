@@ -45,15 +45,17 @@ const AdminTeachers = () => {
     <div className="flex-grow h-full flex flex-col gap-y-5 items-start justify-start p-3">
       <h1 className="font-semibold text-2xl">Eğitmenler</h1>
       <div className="bg-white h-full rounded-md p-4 w-full border">
-        <div className="w-full grid grid-cols-3 bg-zinc-100 px-4 py-3 rounded">
+        <div className="w-full grid grid-cols-4 bg-zinc-100 px-4 py-3 rounded">
           <span className="font-semibold">E-Posta</span>
+          <span className="font-semibold">Telefon Numarası</span>
           <span className="font-semibold">İsim Soyisim</span>
           <span className="font-semibold">Aktiflik Durumu</span>
         </div>
         <div className="w-full">
           {teachers.map((teacher) => (
-            <div key={teacher.uid} className="grid grid-cols-3 bg-zinc-50 px-4 py-3 gap-4">
-              <span>{teacher.email}</span>
+            <div key={teacher.uid} className="grid grid-cols-4 bg-zinc-50 px-4 py-3 gap-4">
+              <span >{teacher.email}</span>
+              <span>{teacher.phoneNumber}</span>
               <span>{teacher.displayName}</span>
               <p>
                 {teacher.isVerified ? (

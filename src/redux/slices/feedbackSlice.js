@@ -52,6 +52,19 @@ export const feedbackSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(getAllFeedbacks.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllFeedbacks.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.feedbacks = action.payload;
+      })
+      .addCase(getAllFeedbacks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
@@ -73,6 +86,8 @@ export const addFeedback = createAsyncThunk(
   }
 );
 
+
+// Öğrenci ve Öğretmenlerin kendisine ait feedbacklerini getirir
 export const getFeedbacks = createAsyncThunk(
   "feedback/getFeedbacks",
   async (userId) => {
@@ -81,9 +96,26 @@ export const getFeedbacks = createAsyncThunk(
       const q = query(feedbacksRef, where("userId", "==", userId));
       const feedbacksSnapshot = await getDocs(q);
       const feedbacks = feedbacksSnapshot.docs.map((doc) => doc.data());
+      
+
       return feedbacks;
     } catch (e) {
       toast.error("Bir hata oluştu");
+    }
+  }
+);
+// Admin için tüm feedbackleri getirir
+export const getAllFeedbacks = createAsyncThunk(
+  "feedback/getAllFeedbacks",
+  async () => {
+    try {
+      const feedbacksRef = collection(db, "feedbacks");
+      const feedbacksSnapshot = await getDocs(feedbacksRef);
+      const feedbacks = feedbacksSnapshot.docs.map((doc) => doc.data());
+      return feedbacks;
+    } catch (e) {
+      toast.error("Bir hata oluştu");
+      return e.message;
     }
   }
 );

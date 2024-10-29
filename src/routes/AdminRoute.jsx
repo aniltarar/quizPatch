@@ -5,6 +5,7 @@ import AdminStudents from "~/pages/Admin/AdminStudents";
 import AdminTeachers from "~/pages/Admin/AdminTeachers";
 import AdminExams from "~/pages/Admin/AdminExams";
 import AdminClassrooms from "~/pages/Admin/AdminClassrooms";
+import AdminFeedback from "~/pages/Admin/AdminFeedback";
 
 export const AdminRoutes = {
   path: "/",
@@ -15,5 +16,6 @@ export const AdminRoutes = {
       {path:"/admin/teachers" , element: <AdminTeachers/>, loader: () => roleLoader(["admin"])},
       {path:"/admin/exams" , element: <AdminExams/>, loader: () => roleLoader(["admin"])},
       {path:"/admin/classrooms" , element: <AdminClassrooms/>, loader: () => roleLoader(["admin"])},
+      {path:"/admin/feedback" , element: <AdminFeedback/>, loader: () => roleLoader(["admin"])},
   ]
 }

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,18 +9,18 @@ import { addFeedback, getFeedbacks } from '~/redux/slices/feedbackSlice';
 const AddFeedBack = () => {
     const { register, handleSubmit  } = useForm()
     const user = useSelector(state => state.user)
-    const date = new Date();
 
     const dispatch = useDispatch();
     
 
     
     const onSubmit = async (data) => {
-        const reportTime = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+        
         const feedbackData = {
             ...data,
             userId: user.user.uid,
-            reportTime,
+            username: user.user.displayName,
+            reportTime : moment().format('DD.MM.YYYY HH:mm'),
             status: 'pending'
         }
 
@@ -28,9 +30,6 @@ const AddFeedBack = () => {
     }
 
     return (
-        <div className='flex flex-col flex-grow w-full h-full '>
-
-
             <form className='p-5 bg-white w-full ' onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex flex-col gap-y-1  '>
                     <label >Başlık Giriniz.</label>
@@ -42,8 +41,6 @@ const AddFeedBack = () => {
                 </div>
                 <button type='submit' className='bg-blue-500 text-white px-4 py-2 rounded-md mt-5'>Gönder</button>
             </form>
-
-        </div>
     )
 }
 

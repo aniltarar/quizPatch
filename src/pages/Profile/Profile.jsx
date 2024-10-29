@@ -6,6 +6,7 @@ import { updateDoc, doc, collection, getDocs } from 'firebase/firestore'
 import { db } from '~/firebase/firebaseConfig'
 import { updateUser } from '~/redux/slices/userSlice'
 import { toast } from 'react-toastify'
+import AddFeedBack from '../Feedback/AddFeedBack'
 
 
 const Profile = () => {
@@ -85,6 +86,7 @@ const Profile = () => {
                     </button>
                 </div>
             </form>
+    
         </div>
     )
 }

@@ -93,7 +93,7 @@ const EnterExam = () => {
      await setDoc(examRef, {
        ...currentExam,
        enteredStudents : arrayUnion(user.uid)
-     })
+     },{merge:true})
 
      toast.success("Sınavınız başarıyla gönderildi.");
       navigate("/results")
