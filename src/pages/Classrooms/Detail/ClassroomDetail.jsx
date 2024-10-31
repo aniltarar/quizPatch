@@ -8,6 +8,7 @@ import { getAllTeachers } from '~/redux/slices/teacherSlice'
 import { getAllStudents } from '~/redux/slices/studentSlice'
 import { BiTrash } from 'react-icons/bi'
 import { useForm } from 'react-hook-form'
+import LoaderSpinner from '~/components/UI/LoaderSpinner'
 
 const ClassroomDetail = () => {
   const { id } = useParams();
@@ -91,20 +92,20 @@ const ClassroomDetail = () => {
     });
   }, [reset, className, classDesc]);
 
-
-
   useEffect(() => {
-
     dispatch(getClassByID(id));
     dispatch(getAllTeachers());
     dispatch(getAllStudents());
 
   }, [dispatch]);
 
-
   if (isLoading) {
-    return <div className=''>Loading...</div>;
+    return (
+      <LoaderSpinner />
+    )
   }
+
+
 
   if (isSuccess) {
 

@@ -5,7 +5,7 @@ import { getClassromByUserID } from '~/redux/slices/classSlice';
 import { addToExam,  } from '~/redux/slices/examSlice';
 import { toast } from 'react-toastify';
 
-const LeftSide = ({ examQuestions }) => {
+const LeftSide = ({ examQuestions,setExamQuestions }) => {
 
     const dispatch = useDispatch();
     const { userClassrooms } = useSelector(state => state.classrooms);
@@ -27,6 +27,7 @@ const LeftSide = ({ examQuestions }) => {
             }
             delete examFullData.classroomInfo; 
             dispatch(addToExam(examFullData));
+            setExamQuestions([])
             reset();
             toast.success('Sınav başarıyla oluşturuldu');
         } catch (error) {

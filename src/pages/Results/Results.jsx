@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import LoaderSpinner from '~/components/UI/LoaderSpinner'
 import { getCorrectAnswersByExamID, getExamPaperByUserID } from '~/redux/slices/resultSlice'
 
 const Results = () => {
@@ -9,14 +10,22 @@ const Results = () => {
     const dispatch = useDispatch()
 
     const { user } = useSelector(state => state.user)
-    const { examPaper, correctAnswers } = useSelector(state => state.result)
+    const { allExamPapers, correctAnswers,examPaper, isLoading } = useSelector(state => state.result)
+   
 
 
     useEffect(() => {
-        dispatch(getExamPaperByUserID(user.uid))
-        dispatch(getCorrectAnswersByExamID(examPaper.examID))
-
+        dispatch(getExamPaperByUserID(user.uid)) // öğrencinin çözdüğü bütün sınavları getirir.
+    
+        dispatch(getCorrectAnswersByExamID(examPaper.examID)) // doğru cevapları getirir.
     }, [])
+
+
+    if (isLoading) {
+        return (
+          <LoaderSpinner/>
+        )
+      }
 
 
     return (
@@ -43,7 +52,7 @@ const Results = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {examPaper.map((item, i) => (
+                        {allExamPapers?.map((item, i) => (
 
                             <tr key={i} className="bg-white border-b grid grid-cols-3 place-items-center ">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 text-left ">

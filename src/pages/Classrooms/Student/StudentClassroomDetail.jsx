@@ -3,10 +3,12 @@ import { Link, useParams } from 'react-router-dom'
 import { getClassByID } from '~/redux/slices/classSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExamsByClassroomID } from '~/redux/slices/examSlice';
+import LoaderSpinner from '~/components/UI/LoaderSpinner'
+
 
 const StudentClassroomDetail = () => {
     const {id} = useParams();
-    const {currentClassroom}= useSelector(state=>state.classrooms)
+    const {currentClassroom,isLoading}= useSelector(state=>state.classrooms)
     const {exams}=useSelector(state=>state.exam)
     const dispatch = useDispatch()
     
@@ -15,6 +17,11 @@ const StudentClassroomDetail = () => {
         dispatch(getExamsByClassroomID(id))
     }, [])
 
+    if (isLoading) {
+        return (
+            <LoaderSpinner/>
+        )
+    }
     
 
   return (

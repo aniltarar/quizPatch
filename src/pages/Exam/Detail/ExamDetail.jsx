@@ -7,46 +7,59 @@ import { db } from '~/firebase/firebaseConfig'
 import { getExamDetailByID } from '~/redux/slices/examSlice'
 import { toast } from 'react-toastify'
 import QuestionAddModal from '~/components/UI/Modals/Exam/QuestionAddModal'
+import LoaderSpinner from '~/components/UI/LoaderSpinner'
 
 const ExamDetail = () => {
     const dispatch = useDispatch()
-    const { currentExam,isLoading } = useSelector((state) => state.exam)
+    const { currentExam, isLoading } = useSelector((state) => state.exam)
     const { id } = useParams()
 
     const [isAddMode, setIsAddMode] = useState(false)
-    
-        const { questions } = currentExam
-        const [selectedQuestion, setSelectedQuestion] = useState(null)
 
-        const { register, handleSubmit, reset } = useForm(
-            { defaultValues: selectedQuestion }
-        )
+    const { questions } = currentExam
+    const [selectedQuestion, setSelectedQuestion] = useState(null)
+
+    const { register, handleSubmit, reset } = useForm(
+        { defaultValues: selectedQuestion }
+    )
+
 
     useEffect(() => {
         dispatch(getExamDetailByID(id))
     }, [])
 
 
-    useEffect(() => {
-        if (selectedQuestion) {
-            reset(selectedQuestion)
-        }
-    }, [selectedQuestion, reset])
+
+
+
+useEffect(() => {
+    if (selectedQuestion) {
+        const correctAnswerKey = Object.keys(selectedQuestion).find(
+            key => selectedQuestion[key] === selectedQuestion.correctAnswer && key.startsWith('option')
+        );
+
+        reset({
+            ...selectedQuestion,
+            correctAnswer: correctAnswerKey
+        });
+    }
+}, [selectedQuestion, reset]);
 
     const saveExam = async (data) => {
         try {
             const examRef = doc(db, 'exams', id)
-            await updateDoc(examRef, {
-                questions: questions.map((question) => {
+          await updateDoc(examRef, {
+                 questions: questions.map((question) => {
                     if (question.id === selectedQuestion.id) {
-                        return {
-                            ...question,
-                            ...data
-                        }
-                    }
-                    return question
-                })
-            })
+                    return {
+                        ...question,
+                        ...data,
+                        correctAnswer: data.correctAnswer === 'optionA' ? data.optionA : data.correctAnswer === 'optionB' ? data.optionB : data.correctAnswer === 'optionC' ? data.optionC : data.optionD
+                    };
+        }
+        return question;
+    })
+});
             toast.success('Soru başarıyla güncellendi')
             dispatch(getExamDetailByID(id))
         } catch (error) {
@@ -56,7 +69,7 @@ const ExamDetail = () => {
 
     const deleteQuestion = async (questionID) => {
         try {
-            if(confirm('Silmek istediğinize emin misiniz?')) {
+            if (confirm('Silmek istediğinize emin misiniz?')) {
 
                 const examRef = doc(db, 'exams', id)
                 await updateDoc(examRef, {
@@ -71,8 +84,10 @@ const ExamDetail = () => {
     }
 
 
-    if(isLoading) {
-        return <h1>Loading...</h1>
+    if (isLoading) {
+        return (
+            <LoaderSpinner/>
+        )
     }
 
 

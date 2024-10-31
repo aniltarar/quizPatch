@@ -25,7 +25,7 @@ const AddClassroomForm = () => {
   const [resetSelected, setResetSelected] = useState(false)
 
 
-  const { register, handleSubmit,reset } = useForm({
+  const { register, handleSubmit, reset } = useForm({
     resolver: zodResolver(addClassScheme)
   })
   const fetchAll = async () => {
@@ -60,7 +60,7 @@ const AddClassroomForm = () => {
     setTimeout(() => {
       setResetSelected(false)
     }, 100)
-    
+
   }
 
   return (

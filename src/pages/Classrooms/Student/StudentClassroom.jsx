@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import LoaderSpinner from '~/components/UI/LoaderSpinner'
 import { getClassroomByUserIDStudent } from '~/redux/slices/classSlice'
 
 const StudentClassroom = () => {
@@ -8,11 +9,17 @@ const StudentClassroom = () => {
   const dispatch = useDispatch()
 
   const { user } = useSelector(state => state.user)
-  const { userClassrooms } = useSelector(state => state.classrooms)
+  const { userClassrooms, isLoading } = useSelector(state => state.classrooms)
 
   useEffect(() => {
     dispatch(getClassroomByUserIDStudent(user.uid))
   }, [])
+
+  if (isLoading) {
+    return (
+      <LoaderSpinner/>
+    )
+  }
 
   return (
     <div className='w-full flex flex-grow bg-[#f9f9f9] justify-start items-start p-12 flex-col'>

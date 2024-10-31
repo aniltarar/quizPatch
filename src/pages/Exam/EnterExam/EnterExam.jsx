@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { getExamByExamID } from '~/redux/slices/examSlice';
 import { setResults } from '~/redux/slices/resultSlice';
@@ -14,35 +14,34 @@ const EnterExam = () => {
   const { currentExam } = useSelector(state => state.exam);
   const { user } = useSelector(state => state.user);
   const { results } = useSelector(state => state.result);
-  
+
   const { register, handleSubmit, setValue, getValues } = useForm();
   const { questions = [], className, examName, examTime, enteredStudents } = currentExam;
-  
-  
-  
-  
+
+
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answers, setAnswers] = useState([]);
   const navigate = useNavigate();
-  const [remainingTime, setRemainingTime] = useState(examTime);  
-  
+  const [remainingTime, setRemainingTime] = useState(examTime);
+
   useEffect(() => {
     dispatch(getExamByExamID(id));
   }, [dispatch, id]);
 
 
- useEffect(() => {
-    setRemainingTime(currentExam.examTime);  
+  useEffect(() => {
+    setRemainingTime(currentExam.examTime);
   }, [currentExam]);
 
   useEffect(() => {
     if (remainingTime > 0) {
       const interval = setInterval(() => {
         setRemainingTime((prevTime) => prevTime - 1);
-      }, 1000); 
+      }, 1000);
 
-      return () => clearInterval(interval); 
+      return () => clearInterval(interval);
     } else if (remainingTime === 0) {
       toast.warning("Süre doldu, sınav gönderiliyor...");
       onSubmit()
@@ -73,33 +72,34 @@ const EnterExam = () => {
     setAnswers([...answers, { questionID: questions[currentIndex].id, answer }]);
   };
 
-  const onSubmit = async() => {
+
+  const onSubmit = async () => {
     const myResult = ({
       examID: id,
       userID: user.uid,
       examName: examName,
       myAnswers: answers,
     })
-   try {
-     const examPaperRef = doc(collection(db,"examPapers"));
-     const examRef = doc(db, "exams", id)
-     
-    
-     await setDoc(examPaperRef, {
-      id: examPaperRef.id,
-      ...myResult
-     });
+    try {
+      const examPaperRef = doc(collection(db, "examPapers"));
+      const examRef = doc(db, "exams", id)
 
-     await setDoc(examRef, {
-       ...currentExam,
-       enteredStudents : arrayUnion(user.uid)
-     },{merge:true})
 
-     toast.success("Sınavınız başarıyla gönderildi.");
+      await setDoc(examPaperRef, {
+        id: examPaperRef.id,
+        ...myResult
+      });
+
+      await setDoc(examRef, {
+        ...currentExam,
+        enteredStudents: arrayUnion(user.uid)
+      }, { merge: true })
+
+      toast.success("Sınavınız başarıyla gönderildi.");
       navigate("/results")
-   } catch (error) {
+    } catch (error) {
       toast.error(error.message)
-   }
+    }
 
   };
 
@@ -107,14 +107,8 @@ const EnterExam = () => {
 
 
   if (isEntered) {
-
-    setTimeout(() => {
-      navigate("/results")
-    }, 3000);
-
-
     return (
-      <div className='px-4 py-2 w-full bg-red-100 text-red-500 '>Daha önce bu sınav çözülmüş, Sonuçlarınıza yönlendiriliyorsunuz.</div>
+      <div className='px-4 py-2 w-full bg-red-100 text-red-500 '>Daha önce bu sınav çözülmüş. </div>
     )
   }
 
@@ -127,7 +121,7 @@ const EnterExam = () => {
         {remainingTime ? <h1 className="font-semibold text-3xl">{remainingTime}</h1> : <h1 className="font-semibold text-3xl">Süre Doldu</h1>}
       </div>
 
-         {questions.length > 0 && (
+      {questions.length > 0 && (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-y-5">
           <div key={questions[currentIndex].id} className='w-full p-4 flex flex-col gap-y-5'>
             <h2 className="text-2xl font-semibold">{questions[currentIndex].index + 1}{") "} {questions[currentIndex].examQuestionName}</h2>
@@ -163,6 +157,16 @@ const EnterExam = () => {
               >
                 {"D) "}{questions[currentIndex].optionD}
               </button>
+              <button
+                type="button"
+                onClick={() => handleSelectAnswer("empty")}
+                className={`${selectedAnswer === "empty" ? "bg-blue-500 text-white" : "bg-white"} w-full px-4 py-2 rounded-md border transition-colors`}
+              >
+               Boş Bırak
+              </button>
+              
+
+
             </div>
           </div>
 
@@ -176,7 +180,8 @@ const EnterExam = () => {
               Geri
             </button>
 
-            <button
+            <div className='flex gap-x-1'>
+              <button
               type="button"
               onClick={handleNextQuestion}
               disabled={currentIndex === questions.length - 1}
@@ -184,6 +189,7 @@ const EnterExam = () => {
             >
               İleri
             </button>
+            </div>
           </div>
 
           {currentIndex === questions.length - 1 && (

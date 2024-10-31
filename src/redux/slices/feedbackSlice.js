@@ -96,8 +96,6 @@ export const getFeedbacks = createAsyncThunk(
       const q = query(feedbacksRef, where("userId", "==", userId));
       const feedbacksSnapshot = await getDocs(q);
       const feedbacks = feedbacksSnapshot.docs.map((doc) => doc.data());
-      
-
       return feedbacks;
     } catch (e) {
       toast.error("Bir hata oluştu");

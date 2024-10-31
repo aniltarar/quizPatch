@@ -3,22 +3,7 @@ import ClassBox from './ClassBox'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteClassroomByID, getClassromByUserID } from '~/redux/slices/classSlice'
 
-const TeacherClassroomList = () => {
-
-    const { userClassrooms } = useSelector(state => state.classrooms)
-    const { user } = useSelector(state => state.user)
-    const dispatch = useDispatch()
-
-
-
-
-    useEffect(() => {
-        dispatch(getClassromByUserID(user.uid)); 
-      }, [dispatch, user.uid, ]);
-
-
-
-
+const TeacherClassroomList = ({userClassrooms}) => {
 
 
   return (

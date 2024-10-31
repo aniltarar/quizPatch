@@ -30,7 +30,7 @@ const Header = () => {
     return (
         <header className='w-full bg-white flex-none min-h-16 px-12 border-b flex justify-between items-center'>
             <Link to="/" className='text-2xl bg-gradient-to-r bg-clip-text text-transparent from-orange-500 to-purple-500 font-bold'>QuizPatch
-                <small className='text-xs'>v0.9.8</small>
+                <small className='text-xs'>v0.9.9</small>
             </Link >
 
             <nav className='flex gap-x-5'>

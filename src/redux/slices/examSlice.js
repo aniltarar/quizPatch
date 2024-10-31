@@ -233,9 +233,9 @@ export const getExamByExamID = createAsyncThunk(
     try {
       const examRef = doc(db, "exams", examID);
       const exam = await getDoc(examRef);
+      
       return exam.data();
     } catch (error) {
-      console.log(error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -259,6 +259,7 @@ export const getAllExams = createAsyncThunk("exams/getAllExams", async () => {
   }
 
 });
+
 
 
 export const { setCurrentExam, setExams } = examSlice.actions;

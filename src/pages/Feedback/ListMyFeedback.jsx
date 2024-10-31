@@ -8,6 +8,7 @@ import FeedbackModal from '~/components/UI/Modals/Feedback/FeedbackModal';
 
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { FaSearch } from 'react-icons/fa';
+import LoaderSpinner from '~/components/UI/LoaderSpinner';
 
 const ListMyFeedback = () => {
   const [animationParent] = useAutoAnimate()
@@ -16,6 +17,7 @@ const ListMyFeedback = () => {
 
   const user = useSelector(state => state.user)
   const feedback = useSelector(state => state.feedback)
+  const {isLoading} = useSelector(state => state.feedback)
 
   const { feedbacks } = feedback
   
@@ -29,10 +31,16 @@ const ListMyFeedback = () => {
 
   const filteredFeedbacks = feedbacks.filter((feedback) => feedback.title.toLowerCase().includes(search.toLowerCase()))
 
-  return (
+  
+  if (isLoading) {
+    return (
+     <LoaderSpinner/>
+    )
+  }
 
+  return (
     <>
-      {isModal && <FeedbackModal setIsModal={setIsModal} />}
+    {isModal && <FeedbackModal setIsModal={setIsModal} />}
     <div className='flex flex-col flex-grow w-full h-full items-center p-3'>
       <div className='w-full flex justify-between items-center py-3'>
         <span className="flex w-full text-xl font-semibold text-zinc-500 items-center gap-x-1"> <MdOutlineFeedback />Geribildirimlerim.</span>
@@ -50,19 +58,14 @@ const ListMyFeedback = () => {
         )
       }
       <div className='grid lg:grid-cols-2 grid-cols-1 w-full gap-5' ref={animationParent}>
-
         {
           filteredFeedbacks?.map(feedback => (
             <FeedbackBox key={feedback.id} feedback={feedback} />
           ))
         }
       </div>
-
-
     </div>
     </>
-
-
   )
 }
 

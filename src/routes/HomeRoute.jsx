@@ -18,6 +18,7 @@ import Home from "~/pages/Home/Home";
 import Profile from "~/pages/Profile/Profile";
 import Results from "~/pages/Results/Results";
 import ResultsDetail from "~/pages/Results/ResultsDetail";
+import Test from "~/pages/Test/Test";
 import NoVerified from "~/pages/Warnings/NoVerified";
 
 export const HomeRoutes = () => {
@@ -118,6 +119,11 @@ export const HomeRoutes = () => {
         {
           path:"/feedback",
           element: <Feedback/>,
+          loader: () => roleLoader(["teacher", "student"]),
+        },
+        {
+          path:"/test",
+          element: <Test/>,
           loader: () => roleLoader(["teacher", "student"]),
         }
       ]

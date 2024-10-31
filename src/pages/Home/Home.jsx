@@ -17,7 +17,7 @@ const Home = () => {
   }, [dispatch, user?.uid]);
 
   return (
-    <div>
+    <div className="flex-grow h-ful">
       <h1>Anasayfa</h1>
       <h2>Kullanıcıya Ait Sınıflar</h2>
       {userClassrooms?.length > 0 ? (
