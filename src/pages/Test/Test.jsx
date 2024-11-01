@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const Test = () => {
-    useEffect(() => {
-        console.log('Test')
-    }, [])
   return (
     <div>Test</div>
   )

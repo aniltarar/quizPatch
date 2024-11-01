@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, getDocs, getDoc } from "firebase/firestore";
+import { collection, doc, getDocs, getDoc, setDoc } from "firebase/firestore";
 import { db } from "~/firebase/firebaseConfig";
 
 const initialState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
-  errorMessage: '',
-  examPaper: [],
-  allExamPapers:[],
+  errorMessage: "",
+  examPaper: {},
+  allExamPapers: [],
   correctAnswers: [],
 };
 
@@ -135,6 +135,8 @@ export const getCorrectAnswersByExamID = createAsyncThunk(
     }
   }
 );
+
+
 
 export const { setResults } = resultSlice.actions;
 export default resultSlice.reducer;

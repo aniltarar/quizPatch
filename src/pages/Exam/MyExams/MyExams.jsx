@@ -15,6 +15,7 @@ const MyExams = () => {
 
   useEffect(() => {
     dispatch(getMyExamsForTeacher(user.uid))
+    console.log(exams);
   }, [])
 
   if (isLoading) {
@@ -22,6 +23,7 @@ const MyExams = () => {
       <LoaderSpinner />
     )
   }
+
 
 
   return (
@@ -38,37 +40,3 @@ const MyExams = () => {
 
 export default MyExams
 
-
-/*
-
-const [myAnswers, setMyAnswers] = useState([])
-
-const handleAnswers = (e, questionID) => {
-    const answer = {
-        questionID,
-        answer: e.target.value
-    }
-    const filteredAnswers = myAnswers.filter((ans) => ans.questionID !== questionID)
-    setMyAnswers([...filteredAnswers, answer])
-}
-
-const finishExam = async () => {
-  try{
-
-  correctAnswers vs myAnswers = myResult
-
-  const resultRef = doc(db, 'results')
-  await setDoc(resultRef, {
-      examID: id,
-      userID: user.uid,
-      answers: myAnswers,
-      result:
-
-
-  }
-  catch(error){
-  }
-
-
-
-*/

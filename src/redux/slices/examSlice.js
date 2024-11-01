@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "~/firebase/firebaseConfig";
 
@@ -13,6 +18,7 @@ const initialState = {
   exams: [],
   currentExam: {},
   allExams: [],
+  myResults: [],
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -29,7 +35,6 @@ export const examSlice = createSlice({
     setCurrentExam: (state, action) => {
       state.currentExam = action.payload;
     },
-
   },
   extraReducers: (builder) => {
     builder
@@ -128,7 +133,7 @@ export const examSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
       })
-        .addCase(getAllExams.pending, (state) => {
+      .addCase(getAllExams.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
@@ -140,6 +145,22 @@ export const examSlice = createSlice({
         state.allExams = action.payload;
       })
       .addCase(getAllExams.rejected, (state) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+      })
+      .addCase(getExamResultByUserID.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(getExamResultByUserID.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.myResults = action.payload;
+      })
+      .addCase(getExamResultByUserID.rejected, (state) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
@@ -156,7 +177,13 @@ export const addToExam = createAsyncThunk(
         examID: examsRef.id,
         ...exam,
       });
-      console.log("Exam added successfully");
+
+      const classroomRef = doc(db, "classrooms", exam.classroomID);
+
+      await updateDoc(classroomRef, {
+        exams: arrayUnion(examsRef.id),
+      });
+
       return exam;
     } catch (error) {
       console.log(error.message);
@@ -186,6 +213,13 @@ export const deleteExamByID = createAsyncThunk(
   async (examID, { rejectWithValue }) => {
     try {
       const examRef = doc(db, "exams", examID);
+      const examData = await getDoc(examRef);
+      const classroomID = examData.data().classroomID;
+      const classroomRef = doc(db, "classrooms", classroomID);
+      await updateDoc(classroomRef, {
+        exams: arrayRemove(examID),
+      });
+
       await deleteDoc(examRef);
       console.log("Exam deleted successfully");
     } catch (error) {
@@ -233,7 +267,7 @@ export const getExamByExamID = createAsyncThunk(
     try {
       const examRef = doc(db, "exams", examID);
       const exam = await getDoc(examRef);
-      
+
       return exam.data();
     } catch (error) {
       return rejectWithValue(error.message);
@@ -242,8 +276,7 @@ export const getExamByExamID = createAsyncThunk(
 );
 
 export const getAllExams = createAsyncThunk("exams/getAllExams", async () => {
-
-  try{
+  try {
     const examsRef = collection(db, "exams");
     const examsSnapshot = await getDocs(examsRef);
 
@@ -251,16 +284,57 @@ export const getAllExams = createAsyncThunk("exams/getAllExams", async () => {
       id: doc.id,
       ...doc.data(),
     }));
-    
-    return exams
-  }
-  catch(error){
+
+    return exams;
+  } catch (error) {
     console.error("Error fetching exams:", error);
   }
-
 });
 
+// 
+export const getExamResultByUserID = createAsyncThunk(
+  "exams/getExamResultByUserID",
+  async (userID, { rejectWithValue }) => {
+    try {
+      const examPapersRef = collection(db, "examPapers");
+      const q = query(examPapersRef, where("userID", "==", userID));
+      const examPapersSnapshot = await getDocs(q);
+      const examPapers = examPapersSnapshot.docs.map((doc) => doc.data());
+      const examResults = examPapers.map( (examPaper) => {
+        return {
+          examID: examPaper.examID,
+          examPoint: examPaper.examPoint,
+          examName: examPaper.examName,
+        };
+      });
 
+      return examResults;
+    } catch (error) {
+      console.log("getExamResults -> error", error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getExamAveregeByExamID = createAsyncThunk(
+  "exams/getExamAveregeByExamID",
+  async (examID, { rejectWithValue }) => {
+    try {
+      const examPapersRef = collection(db, "examPapers");
+      const q = query(examPapersRef, where("examID", "==", examID));
+      const examPapersSnapshot = await getDocs(q);
+      const examPapers = examPapersSnapshot.docs.map((doc) => doc.data());
+      const totalPoint = examPapers.reduce(
+        (acc, curr) => acc + curr.examPoint,
+        0
+      );
+      const averegePoint = totalPoint / examPapers.length;
+      return averegePoint;
+    } catch (error) {
+      console.log("getExamResults -> error", error);
+    }
+  }
+);
 
 export const { setCurrentExam, setExams } = examSlice.actions;
 export default examSlice.reducer;

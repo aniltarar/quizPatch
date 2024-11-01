@@ -4,6 +4,8 @@ import { deleteExamByID, getMyExamsForTeacher } from '~/redux/slices/examSlice';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaClock } from 'react-icons/fa6';
+import { arrayRemove, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '~/firebase/firebaseConfig';
 
 const ExamBox = ({exam}) => {
 
@@ -12,22 +14,31 @@ const ExamBox = ({exam}) => {
 
   const dispatch = useDispatch()
 
-  const confirmDelete = () => {
-    const confirm = window.confirm('Bu sınavı silmek istediğinize emin misiniz?')
+  const confirmDelete = async() => {
+
+    const confirm = window.confirm('Sınavı silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')
     try{
       if(confirm){
-        dispatch(deleteExamByID(examID))
+        const examRef = doc(db, "exams", examID);
+        const examData = await getDoc(examRef);
+        const classroomID = examData.data().classroomID;
+        const classroomRef = doc(db, "classrooms", classroomID);
+        await updateDoc(classroomRef, {
+          exams: arrayRemove(examID),
+        });
+        await deleteDoc(examRef);
+        toast.success('Sınav başarıyla silindi.')
         dispatch(getMyExamsForTeacher(user.uid))
-        toast.success('Sınav başarıyla silindi.') 
+      }else{
+        toast.error("İşlem iptal edildi.")
+      }
     }
-  }
     catch(error){
-
       console.log(error.message)
       toast.error('Sınav silinirken bir hata oluştu.')
-  
     }
   }
+  
   return (
     <div className='bg-white p-4 rounded-md w-full border'>
         <div className='flex justify-between items-center'>

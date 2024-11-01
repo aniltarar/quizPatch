@@ -10,6 +10,8 @@ import { BiTrash } from 'react-icons/bi'
 import { useForm } from 'react-hook-form'
 import LoaderSpinner from '~/components/UI/LoaderSpinner'
 
+  // Sınıfa öğrenci ekleme yok *******
+
 const ClassroomDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -42,6 +44,7 @@ const ClassroomDetail = () => {
     }
   };
 
+  // Sınıfa öğrenci ekleme yok *******
 
   const deletedStudent = async (studentId) => {
     const filteredStudent = selectedStudent.filter((student) => student.uid !== studentId);

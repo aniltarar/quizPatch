@@ -27,9 +27,10 @@ const StudentClassroom = () => {
       <div className=" w-full grid grid-cols-4 gap-5">
         {
           userClassrooms.length > 0 ? userClassrooms.map((classroom) => (
-            <Link key={classroom.id} to={`/student-classroom-detail/${classroom.id}`} className='w-full bg-white p-5  rounded-md shadow-md my-5' >
+            <Link key={classroom.id} to={`/student-classroom-detail/${classroom.id}`} className='flex items-center justify-between w-full bg-white p-5  rounded-md shadow-md my-5' >
               <span className='text-xl font-semibold'>{classroom.className}</span>
               <span className='text-lg'>{classroom.classDescription}</span>
+              {/* <span>Sınav Sayısı : {classroom.exams.length}</span> */}
             </Link>
           )) : <p className='text-center'>Henüz bir sınıfa katılmadınız.</p>
         }

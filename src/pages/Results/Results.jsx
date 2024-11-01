@@ -60,7 +60,7 @@ const Results = () => {
                                 </th>
 
                                 <td className="px-6 py-4">
-                                    {item.examPoint ? Math.floor(item.examPoint) : 0}
+                                    {item.examPoint ? Math.floor(item.examPoint) : <span>Detay'a giderek notunuzu öğrenin.</span>}
                                 </td>
                                 <td className="px-6 py-4">
                                     <Link className='px-4 py-2 text-white rounded-md bg-blue-500' to={`/results/${item.id}`} >Detaylar</Link>

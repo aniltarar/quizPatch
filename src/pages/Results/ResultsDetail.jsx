@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCorrectAnswersByExamID, getExamPaperByExamPaperID, } from '~/redux/slices/resultSlice';
 import { getExamByExamID } from '~/redux/slices/examSlice';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '~/firebase/firebaseConfig';
 import LoaderSpinner from '~/components/UI/LoaderSpinner';
 
@@ -33,6 +33,7 @@ const ResultsDetail = () => {
 
   useEffect(() => {
     dispatch(getExamPaperByExamPaperID(id));
+
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -47,13 +48,8 @@ const ResultsDetail = () => {
     dispatch(getExamByExamID(examID))
   }, [dispatch, examID])
 
-
   const userAnswers = examPaper?.myAnswers?.map((answer) => answer.answer);
-
-
   const { questionsAnswers } = correctAnswers || {}; // doğru cevaplar
-
-
 
 
   useEffect(() => {
@@ -73,6 +69,7 @@ const ResultsDetail = () => {
 
 
 
+  // ExamPaper içerisindeki examPoint alanını güncelle
   const setResult = async (calculatedExamPoint) => {
     try {
       const examPaperRef = doc(db, "examPapers", id);
@@ -84,11 +81,11 @@ const ResultsDetail = () => {
     }
   };
 
-  
-  
+
+
   if (isLoading) {
     return (
-      <LoaderSpinner/>
+      <LoaderSpinner />
     )
   }
 

@@ -139,6 +139,7 @@ export const getClassromByUserID = createAsyncThunk("getClassromByUserID",async 
           classroom.selectedTeacher.some((teacher) => teacher.uid === userID),
           // classroom.selectedStudent.some((student) => student.uid === userID)
         );
+        console.log(filteredClassrooms);
         return filteredClassrooms; 
   }
   catch(error){
@@ -168,6 +169,7 @@ export const getClassroomByUserIDStudent = createAsyncThunk("getClassroomByUserI
     const filteredClassrooms = classrooms.filter((classroom) =>
       classroom.selectedStudent.some((student) => student.uid === userID)
     );
+    console.log(filteredClassrooms);
     return filteredClassrooms; 
   }
   catch(error){
