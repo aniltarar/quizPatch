@@ -36,7 +36,7 @@ const AdminFeedback = () => {
               <div className='w-full p-2 '>
                    <div className='flex pl-4 pr-2 h-10 border border-zinc-400 text-zinc-500 rounded-full items-center gap-x-2 '>
               <FaSearch/>
-              <input onChange={(e) => setSearch(e.target.value)} type="text" className=' bg-transparent h-full outline-none text-sm' placeholder='Başlığa Göre Ara...' />
+              <input onChange={(e) => setSearch(e.target.value)} type="text" className=' bg-transparent h-full outline-none text-sm w-full' placeholder='Başlığa Göre Ara...' />
             </div>
         </div>
         <div className="w-full grid lg:grid-cols-2 grid-cols-1 gap-5 " ref={animateRef}>

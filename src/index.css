@@ -5,3 +5,16 @@
 body {
     @apply  font-poppins 
 }
+
+*::-webkit-scrollbar {
+    height: 7px;
+    width: 7px;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: #DFE9EB;
+  }
+  *::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-color: #756D6D;
+  }

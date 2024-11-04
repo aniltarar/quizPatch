@@ -3,14 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCorrectAnswersByExamID, getExamPaperByExamPaperID, } from '~/redux/slices/resultSlice';
 import { getExamByExamID } from '~/redux/slices/examSlice';
-import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import {  doc, getDoc,  updateDoc,  } from 'firebase/firestore';
 import { db } from '~/firebase/firebaseConfig';
 import LoaderSpinner from '~/components/UI/LoaderSpinner';
 
 
 const ResultsDetail = () => {
   const dispatch = useDispatch();
-  const { id } = useParams(); // examPaperID
+  const { id } = useParams(); 
   const { user } = useSelector(state => state.user);
   const { currentExam } = useSelector(state => state.exam);
   const { examPaper, correctAnswers, isLoading } = useSelector(state => state.result);
@@ -49,7 +49,7 @@ const ResultsDetail = () => {
   }, [dispatch, examID])
 
   const userAnswers = examPaper?.myAnswers?.map((answer) => answer.answer);
-  const { questionsAnswers } = correctAnswers || {}; // doğru cevaplar
+  const { questionsAnswers } = correctAnswers || {}; 
 
 
   useEffect(() => {
@@ -69,7 +69,6 @@ const ResultsDetail = () => {
 
 
 
-  // ExamPaper içerisindeki examPoint alanını güncelle
   const setResult = async (calculatedExamPoint) => {
     try {
       const examPaperRef = doc(db, "examPapers", id);
@@ -128,7 +127,7 @@ const ResultsDetail = () => {
         </tbody>
       </table>
       <div className='w-full px-4 py-2 rounded-md bg-white border mt-3'>
-        Sınav Notunuz : {examPoint.toFixed(2)}
+        Sınav Notunuz : {examPoint?.toFixed(2)}
       </div>
     </div>
   );
